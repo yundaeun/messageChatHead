@@ -22,7 +22,7 @@ public class ChatBubbleUIService extends Service {
 	LayoutInflater layoutInflater;
 	private int displayWidth, displayHeight;
 	private View deleteView;
-	private View chatView;
+
 	private ImageView deleteIcon;
 
 	ImageView faceImage;
@@ -47,10 +47,9 @@ public class ChatBubbleUIService extends Service {
 
 		// 사이즈 지정
 		int faceIconSize = displayWidth / 5; //아이콘 갯수
-		int dialogSize = displayHeight - faceIconSize - 65; // 화면 넘게 그려짐
 
-		chatView = layoutInflater.inflate(R.layout.chat_view_layout, null);
-		attachLayout(chatView, Gravity.BOTTOM, View.GONE, displayWidth - 50, dialogSize, WindowManager.LayoutParams.TYPE_PHONE);
+
+
 	}
 
 	@Nullable

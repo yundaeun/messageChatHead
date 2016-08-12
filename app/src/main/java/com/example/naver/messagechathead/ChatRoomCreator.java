@@ -3,6 +3,8 @@ package com.example.naver.messagechathead;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -14,13 +16,19 @@ public class ChatRoomCreator {
 	private WindowManager windowManager;
 	private int displayWidth;
 	private int displayHeight;
+	private View chatView;
+	LayoutInflater layoutInflater;
 
 	public ChatRoomCreator(Context context, WindowManager windowManager) {
 		this.context = context;
 		this.windowManager = windowManager;
 
+		getDisplaySize();
+		int faceIconSize = displayWidth / 5;
+		int dialogSize = displayHeight - faceIconSize - 65; // 화면 넘게 그려짐
 
-
+		chatView = layoutInflater.inflate(R.layout.chat_view_layout, null);
+		attachLayout(chatView, Gravity.BOTTOM, View.GONE, displayWidth - 50, dialogSize, WindowManager.LayoutParams.TYPE_PHONE);
 	}
 
 	// 중복 코드
