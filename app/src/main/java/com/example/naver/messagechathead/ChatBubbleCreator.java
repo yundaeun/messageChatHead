@@ -103,14 +103,6 @@ public class ChatBubbleCreator extends LinearLayout implements View.OnTouchListe
 		gestureDetector.onTouchEvent(event);
 		return false;
 	}
-
-	// 자유로운 상태 (chatRoom이 닫힌 상태)
-	// 동작 : 버블이 모여서 함께 움직임
-	// 애니 : 좌, 우 끝으로 이동
-
-	// 고정된 상태 (chatRoom이 펼쳐진 상태)
-	// 동작 : 하나씩 이동 가능
-	// 애니 : up 시 제자리로 이동
 }
 
 class SimpleGestureListener extends GestureDetector.SimpleOnGestureListener {

@@ -39,6 +39,8 @@ public class ChatBubbleUIService extends Service {
 
 
 		ChatBubbleCreator chatBubbleCreator = new ChatBubbleCreator(getApplicationContext(), windowManager);
+		ChatRoomCreator chatRoomCreator = new ChatRoomCreator(getApplicationContext(), windowManager);
+
 		ChatBubbleDeleter chatBubbleDeleter = new ChatBubbleDeleter(getApplicationContext(), windowManager);
 		chatBubbleDeleter.init();
 
