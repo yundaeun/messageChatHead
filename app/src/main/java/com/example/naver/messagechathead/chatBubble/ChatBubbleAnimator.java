@@ -1,4 +1,4 @@
-package com.example.naver.messagechathead;
+package com.example.naver.messagechathead.chatBubble;
 
 import android.content.Context;
 import android.view.View;

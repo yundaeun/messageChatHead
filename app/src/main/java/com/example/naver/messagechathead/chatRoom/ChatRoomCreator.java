@@ -1,4 +1,4 @@
-package com.example.naver.messagechathead;
+package com.example.naver.messagechathead.chatRoom;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import com.example.naver.messagechathead.R;
 
 /**
  * Created by Naver on 16. 8. 12..

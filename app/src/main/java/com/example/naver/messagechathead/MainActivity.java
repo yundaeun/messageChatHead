@@ -6,6 +6,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import com.example.naver.messagechathead.service.ChatBubbleUIService;
 
 public class MainActivity extends AppCompatActivity {
 

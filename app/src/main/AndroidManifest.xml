@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ChatBubbleUIService">
+        <service android:name=".service.ChatBubbleUIService">
             <intent-filter>
                 <action android:name="com.example.naver.messagechathead.ChatHeadService"/>
             </intent-filter>
