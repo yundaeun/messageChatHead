@@ -49,9 +49,8 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		faceIcon = layoutInflater.inflate(R.layout.face_icon_layout, null);
 		faceIconParams = attachLayout(faceIcon, Gravity.START | Gravity.TOP, visible, faceIconSize);
 
-		// move action
+		// interaction
 		faceIcon.setOnTouchListener(this);
-		// click listener
 		gestureDetector = new GestureDetector(context, new SimpleGestureListener());
 
 		// 하나의 버블 당 하나의 채팅방을 갖는다.
