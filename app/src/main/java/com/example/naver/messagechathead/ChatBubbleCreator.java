@@ -28,6 +28,7 @@ public class ChatBubbleCreator extends LinearLayout implements View.OnTouchListe
 	LayoutInflater layoutInflater;
 	private View faceIcon;
 	ChatBubbleDeleter chatBubbleDeleter;
+	ChatRoomCreator chatRoomCreator;
 
 	public ChatBubbleCreator(Context context, WindowManager windowManager) {
 		super(context);
@@ -47,6 +48,15 @@ public class ChatBubbleCreator extends LinearLayout implements View.OnTouchListe
 		gestureDetector = new GestureDetector(context, new SimpleGestureListener());
 		// delete action
 		chatBubbleDeleter = new ChatBubbleDeleter(context, windowManager);
+
+		// 하나의 버블 당 하나의 채팅방을 갖는다.
+		chatRoomCreator  = new ChatRoomCreator(context, windowManager);
+
+		setBindData();
+	}
+
+	private void setBindData() {
+		// 데이터 삽입
 
 	}
 
@@ -88,7 +98,6 @@ public class ChatBubbleCreator extends LinearLayout implements View.OnTouchListe
 					break;
 
 				case MotionEvent.ACTION_MOVE:
-
 					int x = (int)(event.getRawX() - START_X);
 					int y = (int)(event.getRawY() - START_Y);
 					faceIconParams.x = PREV_X + x;
@@ -103,13 +112,18 @@ public class ChatBubbleCreator extends LinearLayout implements View.OnTouchListe
 		gestureDetector.onTouchEvent(event);
 		return false;
 	}
-}
 
-class SimpleGestureListener extends GestureDetector.SimpleOnGestureListener {
+	class SimpleGestureListener extends GestureDetector.SimpleOnGestureListener {
 
-	@Override
-	public boolean onSingleTapConfirmed (MotionEvent e) {
+		@Override
+		public boolean onSingleTapConfirmed (MotionEvent e) {
+			faceIconParams.x = displayWidth;
+			faceIconParams.y = 0;
+			windowManager.updateViewLayout(faceIcon, faceIconParams);
 
-		return true;
+			chatRoomCreator.setChangeVisible();
+			return true;
+		}
 	}
 }
+
