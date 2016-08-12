@@ -32,6 +32,7 @@ public class ChatRoomCreator {
 	}
 
 	// 중복 코드
+	// 디스플레이 사이즈
 	private void getDisplaySize() {
 		DisplayMetrics disp = context.getResources().getDisplayMetrics();
 		displayWidth = disp.widthPixels;
