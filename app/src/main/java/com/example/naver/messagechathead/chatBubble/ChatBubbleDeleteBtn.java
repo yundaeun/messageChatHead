@@ -44,7 +44,7 @@ public class ChatBubbleDeleteBtn {
 	// util로 사용 불가
 	private void getDisplaySize() {
 		DisplayMetrics disp = context.getResources().getDisplayMetrics();
-		displayWidth = disp.widthPixels;
+		displayWidth = disp.widthPixels * 4 / 5;
 		displayHeight = disp.heightPixels;
 	}
 

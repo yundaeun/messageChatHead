@@ -14,14 +14,12 @@ import android.widget.OverScroller;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
 import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
 import com.example.naver.messagechathead.R;
-import com.example.naver.messagechathead.service.ChatBubbleUIService;
 import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
  * Created by DAEUN on 16. 8. 11..
  */
 public class ChatBubble extends LinearLayout implements View.OnTouchListener {
-	private Context context;
 	private WindowManager windowManager;
 	private WindowManager.LayoutParams faceIconParams;
 	private GestureDetector gestureDetector;
@@ -34,7 +32,6 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 	public ChatBubble(boolean bubbleFlag, Context context, WindowManager windowManager, int visible,
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn) {
 		super(context);
-		this.context = context;
 		this.windowManager = windowManager;
 		this.bubbleFlag = bubbleFlag;
 		this.chatBubbleDeleteBtn = chatBubbleDeleteBtn;
@@ -70,7 +67,7 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
 				PixelFormat.TRANSLUCENT);
 		params.gravity = location;
-		windowManager = (WindowManager)context.getSystemService(context.WINDOW_SERVICE);
+		windowManager = (WindowManager)getContext().getSystemService(getContext().WINDOW_SERVICE);
 		windowManager.addView(view, params);
 		view.setVisibility(visibilty);
 		return params;
@@ -131,15 +128,15 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 	}
 
 	private void moveToRight() {
-		faceIconParams.x = getMaxX();
+		faceIconParams.x = getMaxX() * 4 / 5;
 	}
 
 	private int getMaxX() {
-		return ChatBubbleHelper.displayWidth * 4 / 5;
+		return ChatBubbleHelper.displayWidth;
 	}
 
 	private int getCenterX() {
-		return getMaxX()/2;
+		return getMaxX() * 2 /5;
 	}
 
 	class SimpleGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -157,7 +154,7 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		public boolean onSingleTapConfirmed(MotionEvent e) {
 			// 사람 bubble을 클릭한 경우
 			if (bubbleFlag) {
-				faceIconParams.x = getMaxX();
+				faceIconParams.x = getMaxX() * 4 / 5;
 				faceIconParams.y = 0;
 				windowManager.updateViewLayout(faceIcon, faceIconParams);
 				chatRoomCreator.setChangeVisible();

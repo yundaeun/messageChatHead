@@ -13,18 +13,16 @@ import com.example.naver.messagechathead.utils.ChatBubbleHelper;
  * Created by Naver on 16. 8. 12..
  */
 public class ChatRoomCreator extends LinearLayout {
-	private Context context;
 	private WindowManager windowManager;
 	private View chatView;
 
 	public ChatRoomCreator(Context context, WindowManager windowManager) {
 		super(context);
-		this.context = context;
 		this.windowManager = windowManager;
 
 		int faceIconSize = ChatBubbleHelper.displayWidth / 5;
 		int dialogHeight = ChatBubbleHelper.displayHeight - faceIconSize - 65; // 화면 넘게 그려짐
-		int dialogWidth = ChatBubbleHelper.displayWidth - 50;
+		int dialogWidth = ChatBubbleHelper.displayWidth;
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		chatView = layoutInflater.inflate(R.layout.chat_view_layout, null);

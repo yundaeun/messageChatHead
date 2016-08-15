@@ -23,14 +23,13 @@ public class ChatBubbleUIService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
 		layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn = new ChatBubbleDeleteBtn(getApplicationContext(), windowManager);
 		chatBubbleDeleteBtn.init();
 
 		// bubble
-		BUBBLES = 1;
+		BUBBLES = 3;
 		for (int i = 0; i < BUBBLES; i++) {
 			ChatBubble chatBubble =
 				new ChatBubble(true, getApplicationContext(), windowManager, View.VISIBLE, chatBubbleDeleteBtn);
