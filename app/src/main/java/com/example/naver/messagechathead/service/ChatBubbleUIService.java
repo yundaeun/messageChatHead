@@ -47,5 +47,7 @@ public class ChatBubbleUIService extends Service {
 		return null;
 	}
 
-
+	public static void stopService() {
+		stopService();
+	}
 }

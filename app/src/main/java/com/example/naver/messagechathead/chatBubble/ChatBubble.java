@@ -14,6 +14,7 @@ import android.widget.OverScroller;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
 import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
 import com.example.naver.messagechathead.R;
+import com.example.naver.messagechathead.service.ChatBubbleUIService;
 import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
@@ -32,7 +33,6 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 	ChatRoomCreator chatRoomCreator;
 	ChatRoomListCreator chatRoomListCreator;
 
-
 	public ChatBubble(boolean bubbleFlag, Context context, WindowManager windowManager, int visible,
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn) {
 		super(context);
@@ -41,7 +41,7 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		this.bubbleFlag = bubbleFlag;
 		this.chatBubbleDeleteBtn = chatBubbleDeleteBtn;
 
-		MAX_X = ChatBubbleHelper.displayWidth * 4/5;
+		MAX_X = ChatBubbleHelper.displayWidth * 4 / 5;
 		MAX_Y = ChatBubbleHelper.displayHeight;
 
 		int faceIconSize = ChatBubbleHelper.displayWidth / 5;
@@ -96,12 +96,18 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 
 			case MotionEvent.ACTION_UP:
 				if (deleteArea) {
+					if (chatRoomCreator != null) {
+						chatRoomCreator.setChangeVisible();
+					}
+					if (chatRoomListCreator != null) {
+						chatRoomListCreator.setChangeVisible();
+					}
 					faceIcon.setVisibility(View.GONE);
 				}
 				chatBubbleDeleteBtn.deleteAreaHide();
 
 				if (faceIconParams.x > ChatBubbleHelper.displayWidth / 2) {
-					faceIconParams.x = ChatBubbleHelper.displayWidth * 4/5;
+					faceIconParams.x = ChatBubbleHelper.displayWidth * 4 / 5;
 				} else {
 					faceIconParams.x = 0;
 				}
@@ -110,7 +116,7 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 				break;
 		}
 
-		// 상대 좌표를 절대 좌표로 설정
+		// 상대 좌표를 절대 좌표로 변경
 		event.setLocation(event.getRawX(), event.getRawY());
 		gestureDetector.onTouchEvent(event);
 		return false;
@@ -124,7 +130,6 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
 
 			return true;
 		}
@@ -162,8 +167,6 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 			windowManager.updateViewLayout(faceIcon, faceIconParams);
 			return true;
 		}
-
-
 	}
 }
 
