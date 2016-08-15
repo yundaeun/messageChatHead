@@ -3,7 +3,6 @@ package com.example.naver.messagechathead.chatBubble;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -89,12 +88,19 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 
-		boolean stopService = chatBubbleDeleter.onSelectedDeleteButton(faceIconParams);
-		chatBubbleDeleter.changeImageBubbleDeleteBtn(stopService);
-		chatBubbleDeleter.showBubbleDeleteBtn(event.getAction());
+		boolean deleteArea = chatBubbleDeleter.deleteArea(faceIconParams);
+
+		if (deleteArea) {
+			chatBubbleDeleter.changeDeleteButtonForNear();
+		} else {
+			chatBubbleDeleter.changeDeleteButtonForFar();
+		}
 
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
+
+				chatBubbleDeleter.deleteAreaShow();
+
 				START_X = event.getRawX();
 				START_Y = event.getRawY();
 				PREV_X = faceIconParams.x;
@@ -110,9 +116,12 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 				break;
 
 			case MotionEvent.ACTION_UP:
-				if (stopService) {
+				if (deleteArea) {
+					// service stop;
 					faceIcon.setVisibility(View.GONE);
 				}
+				chatBubbleDeleter.deleteAreaHide();
+
 				break;
 		}
 
@@ -146,7 +155,6 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 			//TODO move action onScroll 로 수정
-			Log.d("yde", "yde onScroll");
 			return super.onScroll(e1, e2, distanceX, distanceY);
 
 		}

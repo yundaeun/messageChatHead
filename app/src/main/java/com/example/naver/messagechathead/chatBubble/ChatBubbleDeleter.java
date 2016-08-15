@@ -24,24 +24,28 @@ public class ChatBubbleDeleter {
 
 	private View deleteView;
 	private ImageView deleteIcon;
+	private ChatBubbleAnimator chatBubbleAnimator;
 
 	public ChatBubbleDeleter(Context context, WindowManager windowManager) {
 		this.context = context;
 		this.windowManager = windowManager;
+		chatBubbleAnimator = new ChatBubbleAnimator(context);
 	}
 
 	public void init() {
 		getDisplaySize();
 		int faceIconSize = displayWidth / 5;
 
-		layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		deleteView = layoutInflater.inflate(R.layout.delete_icon_layout, null);
 		deleteIcon = (ImageView)deleteView.findViewById(R.id.deleteImage);
-		attachLayout(deleteView, Gravity.BOTTOM | Gravity.CENTER, View.GONE, faceIconSize, faceIconSize, WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
+		attachLayout(deleteView, Gravity.BOTTOM | Gravity.CENTER, View.GONE, faceIconSize, faceIconSize,
+			WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
 	}
 
 	// 중복 코드
-	private WindowManager.LayoutParams attachLayout(View view, int location, int visibilty, int width, int height, int type) {
+	private WindowManager.LayoutParams attachLayout(View view, int location, int visibilty, int width, int height,
+		int type) {
 		WindowManager.LayoutParams params = new WindowManager.LayoutParams(width, height, type,
 			WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
 			PixelFormat.TRANSLUCENT);
@@ -59,12 +63,9 @@ public class ChatBubbleDeleter {
 		displayHeight = disp.heightPixels;
 	}
 
-	/*
-	*  삭제 버튼 활성화
-	*  motion event가 up일 때, 서비스 종료 (return false)
-	*  @param motion : touch event
-	* */
-	public boolean onSelectedDeleteButton(WindowManager.LayoutParams faceIconParams) {
+	/* 삭제 버튼
+	 * 영역에 들어왔을 때,  */
+	public boolean deleteArea(WindowManager.LayoutParams faceIconParams) {
 		int[] location = new int[2];
 		deleteIcon.getLocationOnScreen(location);
 		int minWidth = location[0] - deleteIcon.getWidth();
@@ -72,29 +73,33 @@ public class ChatBubbleDeleter {
 		int maxWidth = location[0] + deleteIcon.getWidth();
 		int maxHeight = location[1] + deleteIcon.getHeight();
 
-		if (faceIconParams.x < maxWidth && faceIconParams.x > minWidth && faceIconParams.y < maxHeight && faceIconParams.y > minHeight) {
+		if (faceIconParams.x < maxWidth && faceIconParams.x > minWidth && faceIconParams.y < maxHeight
+			&& faceIconParams.y > minHeight) {
 			return true;
 		}
 		return false;
 	}
 
 	/*
-	*  영역에 들어오면 삭제 버튼 활성화
+	*  영역에 들어왔을 때
 	* */
-	public void changeImageBubbleDeleteBtn(boolean flag){
-		if (flag) {
-			deleteIcon.setImageResource(R.drawable.bug);
-		} else {
-			deleteIcon.setImageResource(R.drawable.image);
-		}
+	public void changeDeleteButtonForNear() {
+		deleteIcon.setImageResource(R.drawable.bug);
 	}
 
-	public void showBubbleDeleteBtn(int motion) {
-		ChatBubbleAnimator chatBubbleAnimator = new ChatBubbleAnimator(context);
-		if (motion == MotionEvent.ACTION_DOWN) {
-			chatBubbleAnimator.setAnimation(R.anim.slide_up_in, deleteIcon, deleteView, false);
-		} else if (motion == MotionEvent.ACTION_UP) {
-			chatBubbleAnimator.setAnimation(R.anim.slide_down_out, deleteIcon, deleteView, true);
-		}
+	/*
+	*  영역 밖으로 나갔을 떄
+	* */
+	public void changeDeleteButtonForFar() {
+		deleteIcon.setImageResource(R.drawable.image);
+	}
+
+
+	public void deleteAreaShow() {
+		chatBubbleAnimator.setAnimation(R.anim.slide_up_in, deleteIcon, deleteView, false);
+	}
+
+	public void deleteAreaHide() {
+		chatBubbleAnimator.setAnimation(R.anim.slide_down_out, deleteIcon, deleteView, true);
 	}
 }
