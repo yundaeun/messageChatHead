@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import com.example.naver.messagechathead.R;
 import com.example.naver.messagechathead.service.ChatBubbleUIService;
+import com.example.naver.messagechathead.utils.ChatBubbleUtils;
 
 /**
  * Created by Naver on 16. 8. 12..
@@ -18,9 +19,6 @@ import com.example.naver.messagechathead.service.ChatBubbleUIService;
 public class ChatBubbleDeleter {
 	private Context context;
 	private WindowManager windowManager;
-	private LayoutInflater layoutInflater;
-	private int displayWidth;
-	private int displayHeight;
 
 	private View deleteView;
 	private ImageView deleteIcon;
@@ -33,34 +31,14 @@ public class ChatBubbleDeleter {
 	}
 
 	public void init() {
-		getDisplaySize();
-		int faceIconSize = displayWidth / 5;
+		int faceIconSize = ChatBubbleUtils.displayWidth / 5;
 
-		layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		deleteView = layoutInflater.inflate(R.layout.delete_icon_layout, null);
 		deleteIcon = (ImageView)deleteView.findViewById(R.id.deleteImage);
-		attachLayout(deleteView, Gravity.BOTTOM | Gravity.CENTER, View.GONE, faceIconSize, faceIconSize,
+		ChatBubbleUtils chatBubbleUtils = new ChatBubbleUtils(context, windowManager);
+		chatBubbleUtils.attachLayout(deleteView, Gravity.BOTTOM | Gravity.CENTER, View.GONE, faceIconSize, faceIconSize,
 			WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
-	}
-
-	// 중복 코드
-	private WindowManager.LayoutParams attachLayout(View view, int location, int visibilty, int width, int height,
-		int type) {
-		WindowManager.LayoutParams params = new WindowManager.LayoutParams(width, height, type,
-			WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-			PixelFormat.TRANSLUCENT);
-		params.gravity = location;
-		windowManager = (WindowManager)context.getSystemService(context.WINDOW_SERVICE);
-		windowManager.addView(view, params);
-		view.setVisibility(visibilty);
-		return params;
-	}
-
-	// 중복 코드
-	private void getDisplaySize() {
-		DisplayMetrics disp = context.getResources().getDisplayMetrics();
-		displayWidth = disp.widthPixels;
-		displayHeight = disp.heightPixels;
 	}
 
 	/* 삭제 버튼
@@ -93,7 +71,6 @@ public class ChatBubbleDeleter {
 	public void changeDeleteButtonForFar() {
 		deleteIcon.setImageResource(R.drawable.image);
 	}
-
 
 	public void deleteAreaShow() {
 		chatBubbleAnimator.setAnimation(R.anim.slide_up_in, deleteIcon, deleteView, false);

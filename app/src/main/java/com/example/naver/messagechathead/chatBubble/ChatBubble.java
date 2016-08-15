@@ -3,6 +3,7 @@ package com.example.naver.messagechathead.chatBubble;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,21 +14,19 @@ import android.widget.LinearLayout;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
 import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
 import com.example.naver.messagechathead.R;
+import com.example.naver.messagechathead.utils.ChatBubbleUtils;
 
 /**
  * Created by DAEUN on 16. 8. 11..
  */
 public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 	private Context context;
-	private int displayWidth;
-	private int displayHeight;
 	private WindowManager windowManager;
 	private WindowManager.LayoutParams faceIconParams;
 	private GestureDetector gestureDetector;
 	private float START_X, START_Y;
 	private int PREV_X, PREV_Y;
 	private boolean bubbleFlag;
-	LayoutInflater layoutInflater;
 	private View faceIcon;
 	ChatBubbleDeleter chatBubbleDeleter;
 	ChatRoomCreator chatRoomCreator;
@@ -41,10 +40,9 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		this.bubbleFlag = bubbleFlag;
 		this.chatBubbleDeleter = chatBubbleDeleter;
 
-		getDisplaySize();
-		int faceIconSize = displayWidth / 5;
+		int faceIconSize = ChatBubbleUtils.displayWidth / 5;
 
-		layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		faceIcon = layoutInflater.inflate(R.layout.face_icon_layout, null);
 		faceIconParams = attachLayout(faceIcon, Gravity.START | Gravity.TOP, visible, faceIconSize);
 
@@ -66,13 +64,7 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 	}
 
 	// 중복 코드
-	private void getDisplaySize() {
-		DisplayMetrics disp = context.getResources().getDisplayMetrics();
-		displayWidth = disp.widthPixels;
-		displayHeight = disp.heightPixels;
-	}
-
-	// 중복 코드
+	// Utils 함수 사용하면 NullPointerException 발생
 	private WindowManager.LayoutParams attachLayout(View view, int location, int visibilty, int size) {
 		WindowManager.LayoutParams params =
 			new WindowManager.LayoutParams(size, size, WindowManager.LayoutParams.TYPE_PRIORITY_PHONE,
@@ -140,7 +132,7 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		public boolean onSingleTapConfirmed(MotionEvent e) {
 			// 사람 bubble을 클릭한 경우
 			if (bubbleFlag) {
-				faceIconParams.x = displayWidth;
+				faceIconParams.x = ChatBubbleUtils.displayWidth;
 				faceIconParams.y = 0;
 				windowManager.updateViewLayout(faceIcon, faceIconParams);
 				chatRoomCreator.setChangeVisible();
