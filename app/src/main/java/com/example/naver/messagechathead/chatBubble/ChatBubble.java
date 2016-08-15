@@ -106,10 +106,10 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 				}
 				chatBubbleDeleteBtn.deleteAreaHide();
 
-				if (faceIconParams.x > ChatBubbleHelper.displayWidth / 2) {
-					faceIconParams.x = ChatBubbleHelper.displayWidth * 4 / 5;
+				if (isLeftSide()) {
+					goToLeft();
 				} else {
-					faceIconParams.x = 0;
+					goToRight();
 				}
 				windowManager.updateViewLayout(v, faceIconParams);
 
@@ -120,6 +120,22 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		event.setLocation(event.getRawX(), event.getRawY());
 		gestureDetector.onTouchEvent(event);
 		return false;
+	}
+
+	private boolean isLeftSide() {
+		if (faceIconParams.x < ChatBubbleHelper.displayWidth / 2) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private void goToLeft() {
+		faceIconParams.x = 0;
+	}
+
+	private void goToRight() {
+		faceIconParams.x = ChatBubbleHelper.displayWidth * 4 / 5;
 	}
 
 	class SimpleGestureListener extends GestureDetector.SimpleOnGestureListener {
