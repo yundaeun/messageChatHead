@@ -10,14 +10,14 @@ import android.view.WindowManager;
 /**
  * Created by Naver on 16. 8. 12..
  */
-public class ChatBubbleUtils {
+public class ChatBubbleHelper {
 
 	private Context context;
 	private WindowManager windowManager;
 	public static int displayWidth;
 	public static int displayHeight;
 
-	public ChatBubbleUtils(Context context, WindowManager windowManager) {
+	public ChatBubbleHelper(Context context, WindowManager windowManager) {
 		this.context = context;
 		this.windowManager = windowManager;
 		getDisplaySize();

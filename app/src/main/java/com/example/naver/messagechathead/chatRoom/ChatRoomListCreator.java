@@ -3,8 +3,6 @@ package com.example.naver.messagechathead.chatRoom;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.graphics.PixelFormat;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,7 @@ import android.widget.ListView;
 import com.example.naver.messagechathead.R;
 import com.example.naver.messagechathead.adapter.ChatRoomListAdapter;
 import com.example.naver.messagechathead.data.ChatRoomListData;
-import com.example.naver.messagechathead.utils.ChatBubbleUtils;
+import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
  * Created by Naver on 16. 8. 12..
@@ -28,14 +26,14 @@ public class ChatRoomListCreator {
 		this.windowManager = windowManager;
 
 
-		int faceIconSize = ChatBubbleUtils.displayWidth / 5;
-		int dialogHeight = ChatBubbleUtils.displayHeight - faceIconSize - 65; // 화면 넘게 그려짐
-		int dialogWidth = ChatBubbleUtils.displayWidth - 50;
+		int faceIconSize = ChatBubbleHelper.displayWidth / 5;
+		int dialogHeight = ChatBubbleHelper.displayHeight - faceIconSize - 65; // 화면 넘게 그려짐
+		int dialogWidth = ChatBubbleHelper.displayWidth - 50;
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		ChatRoomListView = layoutInflater.inflate(R.layout.chat_room_list_layout, null);
-		ChatBubbleUtils chatBubbleUtils = new ChatBubbleUtils(context, windowManager);
-		chatBubbleUtils.attachLayout(ChatRoomListView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
+		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(context, windowManager);
+		chatBubbleHelper.attachLayout(ChatRoomListView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
 			WindowManager.LayoutParams.TYPE_PHONE);
 
 		ListView chatRoomListView = (ListView)ChatRoomListView.findViewById(R.id.chat_room_listview);

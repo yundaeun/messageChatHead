@@ -2,7 +2,6 @@ package com.example.naver.messagechathead.chatBubble;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -11,10 +10,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.OverScroller;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
 import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
 import com.example.naver.messagechathead.R;
-import com.example.naver.messagechathead.utils.ChatBubbleUtils;
+import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
  * Created by DAEUN on 16. 8. 11..
@@ -24,24 +24,27 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 	private WindowManager windowManager;
 	private WindowManager.LayoutParams faceIconParams;
 	private GestureDetector gestureDetector;
-	private float START_X, START_Y;
-	private int PREV_X, PREV_Y;
 	private boolean bubbleFlag;
 	private View faceIcon;
-	ChatBubbleDeleter chatBubbleDeleter;
+	private int MAX_X;
+	private int MAX_Y;
+	ChatBubbleDeleteBtn chatBubbleDeleteBtn;
 	ChatRoomCreator chatRoomCreator;
 	ChatRoomListCreator chatRoomListCreator;
 
+
 	public ChatBubble(boolean bubbleFlag, Context context, WindowManager windowManager, int visible,
-		ChatBubbleDeleter chatBubbleDeleter) {
+		ChatBubbleDeleteBtn chatBubbleDeleteBtn) {
 		super(context);
 		this.context = context;
 		this.windowManager = windowManager;
 		this.bubbleFlag = bubbleFlag;
-		this.chatBubbleDeleter = chatBubbleDeleter;
+		this.chatBubbleDeleteBtn = chatBubbleDeleteBtn;
 
-		int faceIconSize = ChatBubbleUtils.displayWidth / 5;
+		MAX_X = ChatBubbleHelper.displayWidth * 4/5;
+		MAX_Y = ChatBubbleHelper.displayHeight;
 
+		int faceIconSize = ChatBubbleHelper.displayWidth / 5;
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		faceIcon = layoutInflater.inflate(R.layout.face_icon_layout, null);
 		faceIconParams = attachLayout(faceIcon, Gravity.START | Gravity.TOP, visible, faceIconSize);
@@ -56,6 +59,7 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		} else {
 			chatRoomListCreator = new ChatRoomListCreator(context, windowManager);
 		}
+
 		setBindData();
 	}
 
@@ -80,59 +84,56 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 
-		boolean deleteArea = chatBubbleDeleter.deleteArea(faceIconParams);
+		boolean deleteArea = chatBubbleDeleteBtn.deleteArea(faceIconParams);
 
 		if (deleteArea) {
-			chatBubbleDeleter.changeDeleteButtonForNear();
+			chatBubbleDeleteBtn.changeDeleteButtonForNear();
 		} else {
-			chatBubbleDeleter.changeDeleteButtonForFar();
+			chatBubbleDeleteBtn.changeDeleteButtonForFar();
 		}
 
 		switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-
-				chatBubbleDeleter.deleteAreaShow();
-
-				START_X = event.getRawX();
-				START_Y = event.getRawY();
-				PREV_X = faceIconParams.x;
-				PREV_Y = faceIconParams.y;
-				break;
-
-			case MotionEvent.ACTION_MOVE:
-				int x = (int)(event.getRawX() - START_X);
-				int y = (int)(event.getRawY() - START_Y);
-				faceIconParams.x = PREV_X + x;
-				faceIconParams.y = PREV_Y + y;
-				windowManager.updateViewLayout(v, faceIconParams);
-				break;
 
 			case MotionEvent.ACTION_UP:
 				if (deleteArea) {
-					// service stop;
 					faceIcon.setVisibility(View.GONE);
 				}
-				chatBubbleDeleter.deleteAreaHide();
+				chatBubbleDeleteBtn.deleteAreaHide();
+
+				if (faceIconParams.x > ChatBubbleHelper.displayWidth / 2) {
+					faceIconParams.x = ChatBubbleHelper.displayWidth * 4/5;
+				} else {
+					faceIconParams.x = 0;
+				}
+				windowManager.updateViewLayout(v, faceIconParams);
 
 				break;
 		}
 
+		// 상대 좌표를 절대 좌표로 설정
+		event.setLocation(event.getRawX(), event.getRawY());
 		gestureDetector.onTouchEvent(event);
 		return false;
 	}
 
 	class SimpleGestureListener extends GestureDetector.SimpleOnGestureListener {
 
+		private int faceIconParamsOnDown_x;
+		private int faceIconParamsOnDown_y;
+		private OverScroller mScroller;
+
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			return super.onFling(e1, e2, velocityX, velocityY);
+
+
+			return true;
 		}
 
 		@Override
 		public boolean onSingleTapConfirmed(MotionEvent e) {
 			// 사람 bubble을 클릭한 경우
 			if (bubbleFlag) {
-				faceIconParams.x = ChatBubbleUtils.displayWidth;
+				faceIconParams.x = ChatBubbleHelper.displayWidth;
 				faceIconParams.y = 0;
 				windowManager.updateViewLayout(faceIcon, faceIconParams);
 				chatRoomCreator.setChangeVisible();
@@ -140,16 +141,29 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 				// default bubble을 클릭 한 경우
 				chatRoomListCreator.setChangeVisible();
 			}
+			return true;
+		}
 
+		@Override
+		public boolean onDown(MotionEvent e) {
+			chatBubbleDeleteBtn.deleteAreaShow();
+			faceIconParamsOnDown_x = faceIconParams.x;
+			faceIconParamsOnDown_y = faceIconParams.y;
 			return true;
 		}
 
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-			//TODO move action onScroll 로 수정
-			return super.onScroll(e1, e2, distanceX, distanceY);
+			int x = (int)(e2.getX() - e1.getX());
+			int y = (int)(e2.getY() - e1.getY());
 
+			faceIconParams.x = faceIconParamsOnDown_x + x;
+			faceIconParams.y = faceIconParamsOnDown_y + y;
+			windowManager.updateViewLayout(faceIcon, faceIconParams);
+			return true;
 		}
+
+
 	}
 }
 
