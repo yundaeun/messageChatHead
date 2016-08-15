@@ -27,8 +27,6 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 	private GestureDetector gestureDetector;
 	private boolean bubbleFlag;
 	private View faceIcon;
-	private int MAX_X;
-	private int MAX_Y;
 	ChatBubbleDeleteBtn chatBubbleDeleteBtn;
 	ChatRoomCreator chatRoomCreator;
 	ChatRoomListCreator chatRoomListCreator;
@@ -41,10 +39,7 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		this.bubbleFlag = bubbleFlag;
 		this.chatBubbleDeleteBtn = chatBubbleDeleteBtn;
 
-		MAX_X = ChatBubbleHelper.displayWidth * 4 / 5;
-		MAX_Y = ChatBubbleHelper.displayHeight;
-
-		int faceIconSize = ChatBubbleHelper.displayWidth / 5;
+		int faceIconSize = getMaxX() / 5;
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		faceIcon = layoutInflater.inflate(R.layout.face_icon_layout, null);
 		faceIconParams = attachLayout(faceIcon, Gravity.START | Gravity.TOP, visible, faceIconSize);
@@ -96,21 +91,17 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 
 			case MotionEvent.ACTION_UP:
 				if (deleteArea) {
-					if (chatRoomCreator != null) {
-						chatRoomCreator.setChangeVisible();
-					}
-					if (chatRoomListCreator != null) {
-						chatRoomListCreator.setChangeVisible();
-					}
+					deleteChatRooms();
 					faceIcon.setVisibility(View.GONE);
 				}
 				chatBubbleDeleteBtn.deleteAreaHide();
 
 				if (isLeftSide()) {
-					goToLeft();
+					moveToLeft();
 				} else {
-					goToRight();
+					moveToRight();
 				}
+
 				windowManager.updateViewLayout(v, faceIconParams);
 
 				break;
@@ -122,20 +113,33 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		return false;
 	}
 
-	private boolean isLeftSide() {
-		if (faceIconParams.x < ChatBubbleHelper.displayWidth / 2) {
-			return true;
-		} else {
-			return false;
+	private void deleteChatRooms() {
+		if (chatRoomCreator != null) {
+			chatRoomCreator.setChangeVisible();
+		}
+		if (chatRoomListCreator != null) {
+			chatRoomListCreator.setChangeVisible();
 		}
 	}
 
-	private void goToLeft() {
+	private boolean isLeftSide() {
+		return faceIconParams.x < getCenterX();
+	}
+
+	private void moveToLeft() {
 		faceIconParams.x = 0;
 	}
 
-	private void goToRight() {
-		faceIconParams.x = ChatBubbleHelper.displayWidth * 4 / 5;
+	private void moveToRight() {
+		faceIconParams.x = getMaxX();
+	}
+
+	private int getMaxX() {
+		return ChatBubbleHelper.displayWidth * 4 / 5;
+	}
+
+	private int getCenterX() {
+		return getMaxX()/2;
 	}
 
 	class SimpleGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -146,7 +150,6 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
 			return true;
 		}
 
@@ -154,7 +157,7 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		public boolean onSingleTapConfirmed(MotionEvent e) {
 			// 사람 bubble을 클릭한 경우
 			if (bubbleFlag) {
-				faceIconParams.x = ChatBubbleHelper.displayWidth;
+				faceIconParams.x = getMaxX();
 				faceIconParams.y = 0;
 				windowManager.updateViewLayout(faceIcon, faceIconParams);
 				chatRoomCreator.setChangeVisible();
