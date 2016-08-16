@@ -2,16 +2,13 @@ package com.example.naver.messagechathead.chatBubble;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.support.v4.view.ViewCompat;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.OverScroller;
 import android.widget.RelativeLayout;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
@@ -29,6 +26,7 @@ public class ChatBubble extends RelativeLayout {
 	private GestureDetector gestureDetector;
 	private boolean bubbleFlag;
 	private View faceIcon;
+	private int bubbleSize;
 	ChatBubbleDeleteBtn chatBubbleDeleteBtn;
 	ChatRoomCreator chatRoomCreator;
 	ChatRoomListCreator chatRoomListCreator;
@@ -41,11 +39,11 @@ public class ChatBubble extends RelativeLayout {
 		this.bubbleFlag = bubbleFlag;
 		this.chatBubbleDeleteBtn = chatBubbleDeleteBtn;
 
-		int faceIconSize = getMaxX() / ChatBubbleConfig.BUBBLE_NUM;
+		bubbleSize = getMaxX() / ChatBubbleConfig.BUBBLE_NUM;
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		faceIcon = layoutInflater.inflate(R.layout.face_icon_layout, null);
 		addView(faceIcon);
-		faceIconParams = attachLayout(this, Gravity.START | Gravity.TOP, visible, faceIconSize);
+		faceIconParams = attachLayout(this, Gravity.START | Gravity.TOP, visible, bubbleSize);
 
 		gestureDetector = new GestureDetector(context, new SimpleGestureListener());
 
@@ -63,8 +61,7 @@ public class ChatBubble extends RelativeLayout {
 		// 데이터 삽입 (이미지 적용)
 	}
 
-	// 중복 코드
-	// Utils 함수 사용하면 NullPointerException 발생
+	// 중복 코드, Utils 함수 사용하면 NullPointerException 발생
 	private WindowManager.LayoutParams attachLayout(View view, int location, int visibilty, int size) {
 		WindowManager.LayoutParams params =
 			new WindowManager.LayoutParams(size, size, WindowManager.LayoutParams.TYPE_PRIORITY_PHONE,
@@ -88,21 +85,20 @@ public class ChatBubble extends RelativeLayout {
 		}
 
 		switch (event.getAction()) {
-
 			case MotionEvent.ACTION_UP:
 				if (deleteArea) {
 					deleteChatRooms();
 					setVisibility(View.GONE);
 				}
 				chatBubbleDeleteBtn.deleteAreaHide();
-/*
-				if (isLeftSide()) {
-					moveToLeft();
-				} else {
-					moveToRight();
-				}
-				//windowManager.updateViewLayout(v, faceIconParams);
-*/
+
+				//				if (isLeftSide()) {
+				//					moveToLeft();
+				//				} else {
+				//					moveToRight();
+				//				}
+				//				windowManager.updateViewLayout(this, faceIconParams);
+
 				if (chatRoomCreator.getVisibility() == View.GONE) {
 					scroller.startScroll(faceIconParams.x, faceIconParams.y, 0, 0, 1000);
 					ViewCompat.postInvalidateOnAnimation(this);
@@ -114,25 +110,6 @@ public class ChatBubble extends RelativeLayout {
 		event.setLocation(event.getRawX(), event.getRawY());
 		gestureDetector.onTouchEvent(event);
 		return false;
-
-	}
-
-	@Override
-	public void computeScroll() {
-		if(scroller.computeScrollOffset()) {
-			int currX = scroller.getCurrX(); //현재 x값
-			int currY = scroller.getCurrY(); //현재 y값
-
-			if(scroller.isFinished()) {
-				requestLayout();
-			} else {
-				faceIconParams.x = currX;
-				faceIconParams.y = currY;
-				windowManager.updateViewLayout(this, faceIconParams);
-			}
-			ViewCompat.postInvalidateOnAnimation(this);
-
-		}
 	}
 
 	private void deleteChatRooms() {
@@ -153,7 +130,7 @@ public class ChatBubble extends RelativeLayout {
 	}
 
 	private void moveToRight() {
-		faceIconParams.x = getMaxX() * 4 / 5;
+		faceIconParams.x = getMaxX() - bubbleSize;
 	}
 
 	private int getMaxX() {
@@ -161,7 +138,32 @@ public class ChatBubble extends RelativeLayout {
 	}
 
 	private int getCenterX() {
-		return getMaxX() * 2 / 5;
+		return (getMaxX() - bubbleSize) / 2;
+	}
+
+	@Override
+	public void computeScroll() {
+		if (scroller.computeScrollOffset()) {
+			if (scroller.isFinished()) {
+				requestLayout();
+			} else {
+				faceIconParams.x = scroller.getCurrX();
+				faceIconParams.y = scroller.getCurrY();
+				windowManager.updateViewLayout(this, faceIconParams);
+			}
+			ViewCompat.postInvalidateOnAnimation(this);
+		}
+	}
+
+	private void fling(int velocityX, int velocityY) {
+		scroller.fling(
+			//current scroll position
+			faceIconParams.x, faceIconParams.y, velocityX, velocityY,
+			//min X, max X
+			0, ChatBubbleHelper.displayWidth - bubbleSize,
+			//min Y, max Y
+			0, ChatBubbleHelper.displayHeight - bubbleSize);
+		ViewCompat.postInvalidateOnAnimation(this);
 	}
 
 	class SimpleGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -179,7 +181,7 @@ public class ChatBubble extends RelativeLayout {
 		public boolean onSingleTapConfirmed(MotionEvent e) {
 			// 사람 bubble을 클릭한 경우
 			if (bubbleFlag) {
-				faceIconParams.x = getMaxX() * 4 / 5;
+				faceIconParams.x = getMaxX() - bubbleSize;
 				faceIconParams.y = 0;
 				windowManager.updateViewLayout(ChatBubble.this, faceIconParams);
 				chatRoomCreator.setChangeVisible();
@@ -211,16 +213,6 @@ public class ChatBubble extends RelativeLayout {
 			windowManager.updateViewLayout(ChatBubble.this, faceIconParams);
 			return true;
 		}
-	}
-	private void fling(int velocityX, int velocityY) {
-		scroller.fling(
-			//current scroll position
-			faceIconParams.x, faceIconParams.y, velocityX, velocityY,
-			//min X, max X
-			0, ChatBubbleHelper.displayWidth - 100,
-			//min Y, max Y
-			0, ChatBubbleHelper.displayHeight - 100 );
-		ViewCompat.postInvalidateOnAnimation(this);
 	}
 }
 

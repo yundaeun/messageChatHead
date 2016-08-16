@@ -12,13 +12,11 @@ import android.widget.ImageView;
 public class ChatBubbleAnimator {
 
 	private Context context;
-
 	public ChatBubbleAnimator(Context context) {
 		this.context = context;
 	}
 
 	/*
-	*  애니메이션 설정
 	*  @param anim : R.anim 리소스 아이디
 	*  @param icon : 움직일 view
 	*  @param parentView : icon을 갖고있는 부모 View

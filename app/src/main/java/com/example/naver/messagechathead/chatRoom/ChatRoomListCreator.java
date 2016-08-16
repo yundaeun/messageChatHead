@@ -26,9 +26,9 @@ public class ChatRoomListCreator {
 		this.context = context;
 		this.windowManager = windowManager;
 
-		int faceIconSize = ChatBubbleHelper.displayWidth / ChatBubbleConfig.BUBBLE_NUM;
-		int dialogHeight = ChatBubbleHelper.displayHeight - faceIconSize - 65; // 화면 넘게 그려짐
-		int dialogWidth = ChatBubbleHelper.displayWidth - 50;
+		int bubbleSize = ChatBubbleHelper.displayWidth / ChatBubbleConfig.BUBBLE_NUM;
+		int dialogWidth = ChatBubbleHelper.displayWidth - 65;
+		int dialogHeight = ChatBubbleHelper.displayHeight - bubbleSize - 65;
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		ChatRoomListView = layoutInflater.inflate(R.layout.chat_room_list_layout, null);
@@ -39,6 +39,9 @@ public class ChatRoomListCreator {
 		ListView chatRoomListView = (ListView)ChatRoomListView.findViewById(R.id.chat_room_listview);
 
 		ArrayList<ChatRoomListData> chatRoomList = new ArrayList<>();
+		chatRoomList.add(new ChatRoomListData("윤다은", "알겠습니다."));
+		chatRoomList.add(new ChatRoomListData("김미미", "감사합니다."));
+		chatRoomList.add(new ChatRoomListData("슈슈니", "오케이!"));
 		chatRoomList.add(new ChatRoomListData("윤다은", "알겠습니다."));
 		chatRoomList.add(new ChatRoomListData("김미미", "감사합니다."));
 		chatRoomList.add(new ChatRoomListData("슈슈니", "오케이!"));

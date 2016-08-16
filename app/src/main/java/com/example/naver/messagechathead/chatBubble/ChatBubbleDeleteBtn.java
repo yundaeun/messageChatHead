@@ -18,10 +18,10 @@ public class ChatBubbleDeleteBtn {
 	private Context context;
 	private WindowManager windowManager;
 	private int displayWidth;
-	private int displayHeight;
 	private View deleteView;
 	private ImageView deleteIcon;
 	private ChatBubbleAnimator chatBubbleAnimator;
+	private int bubbleSize;
 
 	public ChatBubbleDeleteBtn(Context context, WindowManager windowManager) {
 		this.context = context;
@@ -31,13 +31,13 @@ public class ChatBubbleDeleteBtn {
 
 	public void init() {
 		getDisplaySize();
-		int faceIconSize = displayWidth / ChatBubbleConfig.BUBBLE_NUM;
+		bubbleSize = displayWidth / ChatBubbleConfig.BUBBLE_NUM;
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		deleteView = layoutInflater.inflate(R.layout.delete_icon_layout, null);
 		deleteIcon = (ImageView)deleteView.findViewById(R.id.deleteImage);
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(context, windowManager);
-		chatBubbleHelper.attachLayout(deleteView, Gravity.BOTTOM | Gravity.CENTER, View.GONE, faceIconSize, faceIconSize,
+		chatBubbleHelper.attachLayout(deleteView, Gravity.BOTTOM | Gravity.CENTER, View.GONE, bubbleSize, bubbleSize,
 			WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
 	}
 
@@ -45,8 +45,7 @@ public class ChatBubbleDeleteBtn {
 	// util로 사용 불가
 	private void getDisplaySize() {
 		DisplayMetrics disp = context.getResources().getDisplayMetrics();
-		displayWidth = disp.widthPixels * 4/5;
-		displayHeight = disp.heightPixels;
+		displayWidth = disp.widthPixels - bubbleSize;
 	}
 
 	public boolean deleteArea(WindowManager.LayoutParams faceIconParams) {

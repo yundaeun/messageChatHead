@@ -21,9 +21,9 @@ public class ChatRoomCreator extends LinearLayout {
 		super(context);
 		this.windowManager = windowManager;
 
-		int faceIconSize = ChatBubbleHelper.displayWidth / ChatBubbleConfig.BUBBLE_NUM;
-		int dialogHeight = ChatBubbleHelper.displayHeight - faceIconSize - 65; // 화면 넘게 그려짐
-		int dialogWidth = ChatBubbleHelper.displayWidth -50;
+		int bubbleSize = ChatBubbleHelper.displayWidth / ChatBubbleConfig.BUBBLE_NUM;
+		int dialogWidth = ChatBubbleHelper.displayWidth - 65;
+		int dialogHeight = ChatBubbleHelper.displayHeight - bubbleSize - 65;
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		chatView = layoutInflater.inflate(R.layout.chat_view_layout, null);
