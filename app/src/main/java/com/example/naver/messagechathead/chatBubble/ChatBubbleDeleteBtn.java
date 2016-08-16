@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import com.example.naver.messagechathead.R;
+import com.example.naver.messagechathead.utils.ChatBubbleConfig;
 import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
@@ -30,7 +31,7 @@ public class ChatBubbleDeleteBtn {
 
 	public void init() {
 		getDisplaySize();
-		int faceIconSize = displayWidth / 5;
+		int faceIconSize = displayWidth / ChatBubbleConfig.BUBBLE_NUM;
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		deleteView = layoutInflater.inflate(R.layout.delete_icon_layout, null);
@@ -44,7 +45,7 @@ public class ChatBubbleDeleteBtn {
 	// util로 사용 불가
 	private void getDisplaySize() {
 		DisplayMetrics disp = context.getResources().getDisplayMetrics();
-		displayWidth = disp.widthPixels * 4 / 5;
+		displayWidth = disp.widthPixels * 4/5;
 		displayHeight = disp.heightPixels;
 	}
 

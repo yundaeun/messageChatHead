@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.example.naver.messagechathead.R;
 import com.example.naver.messagechathead.adapter.ChatRoomListAdapter;
 import com.example.naver.messagechathead.data.ChatRoomListData;
+import com.example.naver.messagechathead.utils.ChatBubbleConfig;
 import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
@@ -25,8 +26,7 @@ public class ChatRoomListCreator {
 		this.context = context;
 		this.windowManager = windowManager;
 
-
-		int faceIconSize = ChatBubbleHelper.displayWidth / 5;
+		int faceIconSize = ChatBubbleHelper.displayWidth / ChatBubbleConfig.BUBBLE_NUM;
 		int dialogHeight = ChatBubbleHelper.displayHeight - faceIconSize - 65; // 화면 넘게 그려짐
 		int dialogWidth = ChatBubbleHelper.displayWidth - 50;
 

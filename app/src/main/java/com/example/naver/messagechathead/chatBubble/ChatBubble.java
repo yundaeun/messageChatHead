@@ -2,6 +2,8 @@ package com.example.naver.messagechathead.chatBubble;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
+import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -11,15 +13,17 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.OverScroller;
+import android.widget.RelativeLayout;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
 import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
 import com.example.naver.messagechathead.R;
+import com.example.naver.messagechathead.utils.ChatBubbleConfig;
 import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
  * Created by DAEUN on 16. 8. 11..
  */
-public class ChatBubble extends LinearLayout implements View.OnTouchListener {
+public class ChatBubble extends RelativeLayout {
 	private WindowManager windowManager;
 	private WindowManager.LayoutParams faceIconParams;
 	private GestureDetector gestureDetector;
@@ -28,6 +32,7 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 	ChatBubbleDeleteBtn chatBubbleDeleteBtn;
 	ChatRoomCreator chatRoomCreator;
 	ChatRoomListCreator chatRoomListCreator;
+	private OverScroller scroller;
 
 	public ChatBubble(boolean bubbleFlag, Context context, WindowManager windowManager, int visible,
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn) {
@@ -36,13 +41,12 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		this.bubbleFlag = bubbleFlag;
 		this.chatBubbleDeleteBtn = chatBubbleDeleteBtn;
 
-		int faceIconSize = getMaxX() / 5;
+		int faceIconSize = getMaxX() / ChatBubbleConfig.BUBBLE_NUM;
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		faceIcon = layoutInflater.inflate(R.layout.face_icon_layout, null);
-		faceIconParams = attachLayout(faceIcon, Gravity.START | Gravity.TOP, visible, faceIconSize);
+		addView(faceIcon);
+		faceIconParams = attachLayout(this, Gravity.START | Gravity.TOP, visible, faceIconSize);
 
-		// interaction
-		faceIcon.setOnTouchListener(this);
 		gestureDetector = new GestureDetector(context, new SimpleGestureListener());
 
 		// 하나의 버블 당 하나의 채팅방을 갖는다.
@@ -51,7 +55,7 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		} else {
 			chatRoomListCreator = new ChatRoomListCreator(context, windowManager);
 		}
-
+		scroller = new OverScroller(getContext());
 		setBindData();
 	}
 
@@ -74,8 +78,7 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 	}
 
 	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-
+	public boolean onTouchEvent(MotionEvent event) {
 		boolean deleteArea = chatBubbleDeleteBtn.deleteArea(faceIconParams);
 
 		if (deleteArea) {
@@ -89,18 +92,21 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 			case MotionEvent.ACTION_UP:
 				if (deleteArea) {
 					deleteChatRooms();
-					faceIcon.setVisibility(View.GONE);
+					setVisibility(View.GONE);
 				}
 				chatBubbleDeleteBtn.deleteAreaHide();
-
+/*
 				if (isLeftSide()) {
 					moveToLeft();
 				} else {
 					moveToRight();
 				}
-
-				windowManager.updateViewLayout(v, faceIconParams);
-
+				//windowManager.updateViewLayout(v, faceIconParams);
+*/
+				if (chatRoomCreator.getVisibility() == View.GONE) {
+					scroller.startScroll(faceIconParams.x, faceIconParams.y, 0, 0, 1000);
+					ViewCompat.postInvalidateOnAnimation(this);
+				}
 				break;
 		}
 
@@ -108,6 +114,25 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		event.setLocation(event.getRawX(), event.getRawY());
 		gestureDetector.onTouchEvent(event);
 		return false;
+
+	}
+
+	@Override
+	public void computeScroll() {
+		if(scroller.computeScrollOffset()) {
+			int currX = scroller.getCurrX(); //현재 x값
+			int currY = scroller.getCurrY(); //현재 y값
+
+			if(scroller.isFinished()) {
+				requestLayout();
+			} else {
+				faceIconParams.x = currX;
+				faceIconParams.y = currY;
+				windowManager.updateViewLayout(this, faceIconParams);
+			}
+			ViewCompat.postInvalidateOnAnimation(this);
+
+		}
 	}
 
 	private void deleteChatRooms() {
@@ -136,17 +161,17 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 	}
 
 	private int getCenterX() {
-		return getMaxX() * 2 /5;
+		return getMaxX() * 2 / 5;
 	}
 
 	class SimpleGestureListener extends GestureDetector.SimpleOnGestureListener {
-
 		private int faceIconParamsOnDown_x;
 		private int faceIconParamsOnDown_y;
-		private OverScroller mScroller;
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+			scroller.forceFinished(true);
+			fling((int)velocityX, (int)velocityY);
 			return true;
 		}
 
@@ -156,8 +181,9 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 			if (bubbleFlag) {
 				faceIconParams.x = getMaxX() * 4 / 5;
 				faceIconParams.y = 0;
-				windowManager.updateViewLayout(faceIcon, faceIconParams);
+				windowManager.updateViewLayout(ChatBubble.this, faceIconParams);
 				chatRoomCreator.setChangeVisible();
+
 			} else {
 				// default bubble을 클릭 한 경우
 				chatRoomListCreator.setChangeVisible();
@@ -170,6 +196,9 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 			chatBubbleDeleteBtn.deleteAreaShow();
 			faceIconParamsOnDown_x = faceIconParams.x;
 			faceIconParamsOnDown_y = faceIconParams.y;
+
+			scroller.forceFinished(true); //스크롤 멈추기
+			ViewCompat.postInvalidateOnAnimation(ChatBubble.this);
 			return true;
 		}
 
@@ -177,12 +206,21 @@ public class ChatBubble extends LinearLayout implements View.OnTouchListener {
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 			int x = (int)(e2.getX() - e1.getX());
 			int y = (int)(e2.getY() - e1.getY());
-
 			faceIconParams.x = faceIconParamsOnDown_x + x;
 			faceIconParams.y = faceIconParamsOnDown_y + y;
-			windowManager.updateViewLayout(faceIcon, faceIconParams);
+			windowManager.updateViewLayout(ChatBubble.this, faceIconParams);
 			return true;
 		}
+	}
+	private void fling(int velocityX, int velocityY) {
+		scroller.fling(
+			//current scroll position
+			faceIconParams.x, faceIconParams.y, velocityX, velocityY,
+			//min X, max X
+			0, ChatBubbleHelper.displayWidth - 100,
+			//min Y, max Y
+			0, ChatBubbleHelper.displayHeight - 100 );
+		ViewCompat.postInvalidateOnAnimation(this);
 	}
 }
 

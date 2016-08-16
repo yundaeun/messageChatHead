@@ -11,13 +11,13 @@ import android.view.View;
 import android.view.WindowManager;
 import com.example.naver.messagechathead.chatBubble.ChatBubble;
 import com.example.naver.messagechathead.chatBubble.ChatBubbleDeleteBtn;
+import com.example.naver.messagechathead.utils.ChatBubbleConfig;
 
 /**
  * Created by DAEUN on 16. 7. 12..
  */
 public class ChatBubbleUIService extends Service {
 	private WindowManager windowManager;
-	public static int BUBBLES;  // 최고 4개까지 가능
 	LayoutInflater layoutInflater;
 
 	@Override
@@ -28,16 +28,20 @@ public class ChatBubbleUIService extends Service {
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn = new ChatBubbleDeleteBtn(getApplicationContext(), windowManager);
 		chatBubbleDeleteBtn.init();
 
+		// default icon
+		ChatBubble chatBubbleDefault =
+			new ChatBubble(false, getApplicationContext(), windowManager, View.GONE, chatBubbleDeleteBtn);
+
+
+		// int bubble1 = ChatBubbleConfig.BUBBLE_NUM;
 		// bubble
-		BUBBLES = 3;
-		for (int i = 0; i < BUBBLES; i++) {
+		int bubble = 1;
+
+		for (int i = 0; i < bubble; i++) {
 			ChatBubble chatBubble =
 				new ChatBubble(true, getApplicationContext(), windowManager, View.VISIBLE, chatBubbleDeleteBtn);
 		}
 
-		// default icon
-		ChatBubble chatBubbleDefault =
-			new ChatBubble(false, getApplicationContext(), windowManager, View.VISIBLE, chatBubbleDeleteBtn);
 	}
 
 	@Nullable
