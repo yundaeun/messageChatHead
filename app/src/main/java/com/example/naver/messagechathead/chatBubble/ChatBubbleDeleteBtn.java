@@ -41,14 +41,12 @@ public class ChatBubbleDeleteBtn {
 			WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
 	}
 
-	// 중복 코드
-	// util로 사용 불가
 	private void getDisplaySize() {
 		DisplayMetrics disp = context.getResources().getDisplayMetrics();
 		displayWidth = disp.widthPixels - bubbleSize;
 	}
 
-	public boolean deleteArea(WindowManager.LayoutParams faceIconParams) {
+	public boolean isOverlayDeleteArea(WindowManager.LayoutParams faceIconParams) {
 		int[] location = new int[2];
 		deleteIcon.getLocationOnScreen(location);
 		int minWidth = location[0] - deleteIcon.getWidth();

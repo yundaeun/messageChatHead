@@ -23,7 +23,6 @@ public class ChatBubbleHelper {
 		getDisplaySize();
 	}
 
-	// 중복 코드
 	public WindowManager.LayoutParams attachLayout(View view, int location, int visibilty, int width, int height,
 		int type) {
 		WindowManager.LayoutParams params =
@@ -43,4 +42,20 @@ public class ChatBubbleHelper {
 		displayHeight = disp.heightPixels;
 	}
 
+
+	public static int getBubbleSize() {
+		return ChatBubbleHelper.displayWidth / ChatBubbleConfig.BUBBLE_NUM;
+	}
+
+	public static int getOptimizeWidth() {
+		return displayWidth - getBubbleSize();
+	}
+
+	public static int getOptimizeHeight() {
+		return displayHeight - getBubbleSize();
+	}
+
+	public static int getDisplayCenter() {
+		return displayWidth / 2;
+	}
 }
