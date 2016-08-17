@@ -42,7 +42,6 @@ public class ChatBubbleHelper {
 		displayHeight = disp.heightPixels;
 	}
 
-
 	public static int getBubbleSize() {
 		return ChatBubbleHelper.displayWidth / ChatBubbleConfig.BUBBLE_NUM;
 	}

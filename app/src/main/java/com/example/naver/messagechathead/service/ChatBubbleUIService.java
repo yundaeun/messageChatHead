@@ -1,15 +1,12 @@
 package com.example.naver.messagechathead.service;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.WindowManager;
 import com.example.naver.messagechathead.chatBubble.ChatBubble;
+import com.example.naver.messagechathead.chatBubble.ChatBubbleContainer;
 import com.example.naver.messagechathead.chatBubble.ChatBubbleDeleteBtn;
 import com.example.naver.messagechathead.utils.ChatBubbleConfig;
 
@@ -18,30 +15,25 @@ import com.example.naver.messagechathead.utils.ChatBubbleConfig;
  */
 public class ChatBubbleUIService extends Service {
 	private WindowManager windowManager;
-	LayoutInflater layoutInflater;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn = new ChatBubbleDeleteBtn(getApplicationContext(), windowManager);
 		chatBubbleDeleteBtn.init();
 
 		// default icon
-		ChatBubble chatBubbleDefault =
-			new ChatBubble(false, getApplicationContext(), windowManager, View.GONE, chatBubbleDeleteBtn);
+		//ChatBubble chatBubbleDefault =
+		//	new ChatBubble(false, getApplicationContext(), windowManager, chatBubbleDeleteBtn);
+		//chatBubbleDefault.init();
 
-
-		// int bubble1 = ChatBubbleConfig.BUBBLE_NUM;
-		// bubble
-		int bubble = 1;
-
+		int bubble = ChatBubbleConfig.BUBBLE_NUM;
 		for (int i = 0; i < bubble; i++) {
-			ChatBubble chatBubble =
-				new ChatBubble(true, getApplicationContext(), windowManager, View.VISIBLE, chatBubbleDeleteBtn);
+			ChatBubble chatBubble = new ChatBubble(true, getApplicationContext(), windowManager, chatBubbleDeleteBtn);
+			chatBubble.init();
+			ChatBubbleContainer.addChatBubble(chatBubble);
 		}
-
 	}
 
 	@Nullable

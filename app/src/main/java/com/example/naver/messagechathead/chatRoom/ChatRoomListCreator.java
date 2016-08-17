@@ -3,6 +3,7 @@ package com.example.naver.messagechathead.chatRoom;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,7 @@ public class ChatRoomListCreator {
 		this.context = context;
 		this.windowManager = windowManager;
 
-		int bubbleSize = ChatBubbleHelper.displayWidth / ChatBubbleConfig.BUBBLE_NUM;
+		int bubbleSize = ChatBubbleHelper.getBubbleSize();
 		int dialogWidth = ChatBubbleHelper.displayWidth - 65;
 		int dialogHeight = ChatBubbleHelper.displayHeight - bubbleSize - 65;
 
@@ -52,10 +53,22 @@ public class ChatRoomListCreator {
 	}
 
 	public void setChangeVisible() {
-		if (ChatRoomListView.getVisibility() == View.GONE) {
-			ChatRoomListView.setVisibility(View.VISIBLE);
-		} else {
-			ChatRoomListView.setVisibility(View.GONE);
+		if (ChatRoomListView != null) {
+			if (ChatRoomListView.getVisibility() == View.GONE) {
+				ChatRoomListView.setVisibility(View.VISIBLE);
+			} else {
+				ChatRoomListView.setVisibility(View.GONE);
+			}
 		}
+	}
+
+	public boolean getChatRoomListVisibility() {
+		if (ChatRoomListView != null) {
+			if (ChatRoomListView.getVisibility() == View.VISIBLE) {
+
+				return true;
+			}
+		}
+		return false;
 	}
 }
