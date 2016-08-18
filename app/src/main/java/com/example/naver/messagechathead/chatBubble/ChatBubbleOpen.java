@@ -12,31 +12,29 @@ package com.example.naver.messagechathead.chatBubble;
  * Created by DAEUN on 16. 8. 11..
  */
 public class ChatBubbleOpen  {
-	private ArrayList<ChatBubble> bubbleList;
-	private ArrayList<WindowManager.LayoutParams> bubbleParamList;
 
 	public ChatBubbleOpen() {
-		bubbleList = ChatBubbleContainer.getBubbleList();
-		bubbleParamList = ChatBubbleContainer.getBubbleParams();
-	}
-	public void moveToStart() {
 
 	}
 
-	public OverScroller updateViewBubble(View view, OverScroller scroller, WindowManager.LayoutParams layoutParams, int velocityX, int velocityY) {
+	public void moveToStart(OverScroller scroller, WindowManager.LayoutParams layoutParams) {
+		int finalX = ChatBubbleHelper.getOptimizeWidth() - layoutParams.x;
+		int finalY = -layoutParams.y;
+		scroller.startScroll(layoutParams.x, layoutParams.y, finalX, finalY);
+	}
+
+	public void updateViewBubble(View view, OverScroller scroller, WindowManager.LayoutParams layoutParams, int velocityX, int velocityY) {
 		scroller.fling(
 			layoutParams.x, layoutParams.y, velocityX, velocityY,
 			0, ChatBubbleHelper.getOptimizeWidth(),
 			0, ChatBubbleHelper.getOptimizeHeight());
 		ViewCompat.postInvalidateOnAnimation(view);
-		return scroller;
 	}
 
-	public OverScroller scrollBubble(View view, OverScroller scroller, WindowManager windowManager, WindowManager.LayoutParams layoutParams) {
+	public void scrollBubble(View view, OverScroller scroller, WindowManager windowManager, WindowManager.LayoutParams layoutParams) {
 		layoutParams.x = scroller.getCurrX();
 		layoutParams.y = scroller.getCurrY();
 		windowManager.updateViewLayout(view, layoutParams);
-		return scroller;
 	}
 
 	public void updateViewBubble(View view, WindowManager windowManager, WindowManager.LayoutParams layoutParams, float distanceX,

@@ -26,6 +26,7 @@ public class ChatBubble extends RelativeLayout {
 	private boolean bubbleFlag;
 	private OverScroller scroller;
 	private int bubbleSize;
+	private int prevXParams;
 	ChatBubbleDeleteBtn chatBubbleDeleteBtn;
 	ChatRoomCreator chatRoomCreator;
 	ChatRoomListCreator chatRoomListCreator;
@@ -90,9 +91,9 @@ public class ChatBubble extends RelativeLayout {
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_UP:
 				if (checkDialogState()) {
-					chatBubbleOpen.moveToStart();
+					chatBubbleOpen.moveToStart(scroller, layoutParams);
 				} else {
-					scroller = chatBubbleClose.moveToLeftOrRight(scroller);
+					chatBubbleClose.moveToLeftOrRight(scroller);
 				}
 				ViewCompat.postInvalidateOnAnimation(this);
 				serviceStopWithDeleteBtn();
@@ -121,9 +122,9 @@ public class ChatBubble extends RelativeLayout {
 				requestLayout();
 			} else {
 				if (checkDialogState()) {
-					scroller = chatBubbleOpen.scrollBubble(this, scroller, windowManager, layoutParams);
+					chatBubbleOpen.scrollBubble(this, scroller, windowManager, layoutParams);
 				} else {
-					scroller = chatBubbleClose.scrollBubbles(scroller, windowManager);
+					chatBubbleClose.scrollBubbles(scroller, windowManager);
 				}
 			}
 			ViewCompat.postInvalidateOnAnimation(this);
@@ -132,9 +133,9 @@ public class ChatBubble extends RelativeLayout {
 
 	private void fling(int velocityX, int velocityY) {
 		if (checkDialogState()) {
-			scroller = chatBubbleOpen.updateViewBubble(this, scroller, layoutParams, velocityX, velocityY);
+			chatBubbleOpen.updateViewBubble(this, scroller, layoutParams, velocityX, velocityY);
 		} else {
-			scroller = chatBubbleClose.flingBubbles(scroller, velocityX, velocityY);
+			chatBubbleClose.flingBubbles(scroller, velocityX, velocityY);
 		}
 	}
 
@@ -149,10 +150,8 @@ public class ChatBubble extends RelativeLayout {
 		@Override
 		public boolean onSingleTapConfirmed(MotionEvent e) {
 			if (checkDialogState()) {
-				// open 각 채팅방으로 이동
 				chatBubbleClose.moveToTopAndRight(scroller);
 			} else {
-				// close 위로 이동
 				chatBubbleClose.moveToUpAndArrangeBubbles(scroller);
 
 			}
@@ -162,6 +161,7 @@ public class ChatBubble extends RelativeLayout {
 
 		@Override
 		public boolean onDown(MotionEvent e) {
+			prevXParams = layoutParams.x;
 			chatBubbleDeleteBtn.deleteAreaShow();
 			scroller.forceFinished(true);
 			return true;

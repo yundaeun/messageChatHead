@@ -23,12 +23,7 @@ public class ChatBubbleUIService extends Service {
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn = new ChatBubbleDeleteBtn(getApplicationContext(), windowManager);
 		chatBubbleDeleteBtn.init();
 
-		// default icon
-		//ChatBubble chatBubbleDefault =
-		//	new ChatBubble(false, getApplicationContext(), windowManager, chatBubbleDeleteBtn);
-		//chatBubbleDefault.init();
-
-		int bubble = ChatBubbleConfig.BUBBLE_NUM;
+		int bubble = 2;
 		for (int i = 0; i < bubble; i++) {
 			ChatBubble chatBubble = new ChatBubble(true, getApplicationContext(), windowManager, chatBubbleDeleteBtn);
 			chatBubble.init();
