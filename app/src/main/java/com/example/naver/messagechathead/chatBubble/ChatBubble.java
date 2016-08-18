@@ -185,8 +185,10 @@ public class ChatBubble extends RelativeLayout {
 		private void changeDeleteButtonImage() {
 			boolean deleteArea = chatBubbleDeleteBtn.isOverlayDeleteArea(layoutParams);
 			if (deleteArea) {
+				Log.d("Yde", "yde delete near");
 				chatBubbleDeleteBtn.changeDeleteButtonForNear();
 			} else {
+				Log.d("Yde", "yde delete far");
 				chatBubbleDeleteBtn.changeDeleteButtonForFar();
 			}
 		}

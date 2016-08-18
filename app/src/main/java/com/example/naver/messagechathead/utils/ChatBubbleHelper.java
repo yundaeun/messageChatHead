@@ -25,6 +25,7 @@ public class ChatBubbleHelper {
 
 	public WindowManager.LayoutParams attachLayout(View view, int location, int visibilty, int width, int height,
 		int type) {
+		Log.d("yde ", "yde : ddd" + width + ", " +height);
 		WindowManager.LayoutParams params =
 			new WindowManager.LayoutParams(width, height, type,
 				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,

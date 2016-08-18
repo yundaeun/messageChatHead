@@ -2,6 +2,7 @@ package com.example.naver.messagechathead.chatBubble;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,8 @@ public class ChatBubbleDeleteBtn {
 	}
 
 	public void init() {
-		bubbleSize = ChatBubbleHelper.getBubbleSize();
+		ChatBubbleHelper helper = new ChatBubbleHelper(context, windowManager);
+		bubbleSize = helper.getBubbleSize();
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		deleteView = layoutInflater.inflate(R.layout.delete_icon_layout, null);
@@ -46,7 +48,7 @@ public class ChatBubbleDeleteBtn {
 		int minHeight = location[1] - deleteIcon.getHeight();
 		int maxWidth = location[0] + deleteIcon.getWidth();
 		int maxHeight = location[1] + deleteIcon.getHeight();
-
+		Log.d("yde" , "yde :" + + deleteIcon.getWidth() + " ''' " + minHeight +"," +minWidth + " : " + maxHeight +", " +maxWidth);
 		if (faceIconParams.x < maxWidth && faceIconParams.x > minWidth && faceIconParams.y < maxHeight
 			&& faceIconParams.y > minHeight) {
 			return true;
