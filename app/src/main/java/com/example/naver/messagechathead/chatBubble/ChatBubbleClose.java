@@ -1,16 +1,9 @@
 package com.example.naver.messagechathead.chatBubble;
 
 import java.util.ArrayList;
-
-import android.content.Context;
 import android.support.v4.view.ViewCompat;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.OverScroller;
-import android.widget.RelativeLayout;
 import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
@@ -74,15 +67,20 @@ public class ChatBubbleClose {
 	}
 
 	public void updateViewBubbles(WindowManager windowManager, float distanceX, float distanceY) {
-		for (int i = 0; i < bubbleList.size(); i++) {
-			bubbleParamList.get(i).x -= (int)distanceX;
-			bubbleParamList.get(i).y -= (int)distanceY;
+		for (int i = bubbleList.size()-1; i >= 0; i--) {
+			if (i == bubbleList.size()-1) {
+				bubbleParamList.get(i).x -= (int)distanceX;
+				bubbleParamList.get(i).y -= (int)distanceY;
+			} else {
+				bubbleParamList.get(i).x = bubbleParamList.get(i+1).x + (int)distanceX;
+				bubbleParamList.get(i).y = bubbleParamList.get(i+1).y + (int)distanceY;
+			}
 			windowManager.updateViewLayout(bubbleList.get(i), bubbleParamList.get(i));
 		}
 	}
 
 	public OverScroller moveToUpAndArrangeBubbles(OverScroller scroller) {
-		int finalX = ChatBubbleHelper.getOptimizeWidth();
+		int finalX = ChatBubbleHelper.getOptimizeWidth() - bubbleParamList.get(bubbleList.size() - 1).x;
 		for (int i = bubbleList.size() - 1; i >= 0; i--) {
 			int finalY = -bubbleParamList.get(i).y;
 			bubbleList.get(i).moveTo(finalX, finalY, bubbleParamList.get(i));

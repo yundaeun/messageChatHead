@@ -142,7 +142,7 @@ public class ChatBubble extends RelativeLayout {
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 			scroller.forceFinished(true);
-			fling((int)velocityX/2, (int)velocityY );
+			fling((int)velocityX/3, (int)velocityY/3 );
 			return true;
 		}
 
