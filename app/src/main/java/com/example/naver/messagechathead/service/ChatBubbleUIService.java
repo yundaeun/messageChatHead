@@ -36,7 +36,7 @@ public class ChatBubbleUIService extends Service {
 		ChatBubbleMore
 			chatBubbleMore = new ChatBubbleMore(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator);
 		chatBubbleMore.init();
-		chatBubbleMore.setImageResource(R.drawable.image);
+	//	chatBubbleMore.setImageResource(R.drawable.image);
 		ChatBubbleContainer.addChatBubble(chatBubbleMore);
 
 		ChatBubbleFace

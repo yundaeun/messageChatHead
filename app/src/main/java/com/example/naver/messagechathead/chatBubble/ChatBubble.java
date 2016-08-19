@@ -1,5 +1,6 @@
 package com.example.naver.messagechathead.chatBubble;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.support.v4.view.ViewCompat;
@@ -9,6 +10,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.OverScroller;
 import android.widget.RelativeLayout;
@@ -61,7 +63,6 @@ public abstract class ChatBubble extends RelativeLayout {
 	}
 
 	public boolean checkDialogState() {
-		Log.d("yde", "yde checkDialogState : " + chatRoomListView.getChatRoomListVisibility() + ",  " + chatRoomView.getChatRoomVisibility());
 		return chatRoomListView.getChatRoomListVisibility() || chatRoomView.getChatRoomVisibility();
 	}
 
@@ -79,6 +80,7 @@ public abstract class ChatBubble extends RelativeLayout {
 	public void moveTo(int finalX, int finalY) {
 		scroller.forceFinished(true);
 		scroller.startScroll(layoutParams.x, layoutParams.y, finalX - layoutParams.x, finalY - layoutParams.y);
+
 		ViewCompat.postInvalidateOnAnimation(this);
 	}
 
@@ -116,6 +118,8 @@ public abstract class ChatBubble extends RelativeLayout {
 		if (scroller.computeScrollOffset()) {
 			if (scroller.isFinished()) {
 				requestLayout();
+				ChatBubbleAnimator chatBubbleAnimator = new ChatBubbleAnimator(getContext());
+				chatBubbleAnimator.setAnimation(R.anim.bounce, ChatBubble.this);
 				if (checkDialogState()) {
 					moveToFirst(scroller, layoutParams);
 				}
@@ -133,6 +137,7 @@ public abstract class ChatBubble extends RelativeLayout {
 	private void fling(int velocityX, int velocityY) {
 		if (checkDialogState()) {
 			flingBubble(this, scroller, layoutParams, velocityX, velocityY);
+
 		} else {
 			chatBubbleClose.flingBubbles(scroller, velocityX, velocityY);
 		}

@@ -26,8 +26,8 @@ public class ChatBubbleOpen  {
 	public void flingBubble(View view, OverScroller scroller, WindowManager.LayoutParams layoutParams, int velocityX, int velocityY) {
 		scroller.fling(
 			layoutParams.x, layoutParams.y, velocityX, velocityY,
-			0, ChatBubbleHelper.getOptimizeWidth(),
-			0, ChatBubbleHelper.getOptimizeHeight());
+			30, ChatBubbleHelper.getOptimizeWidth()-30,
+			30, ChatBubbleHelper.getOptimizeHeight()-30, 30, 30);
 		ViewCompat.postInvalidateOnAnimation(view);
 	}
 

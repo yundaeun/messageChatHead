@@ -55,8 +55,8 @@ public class ChatBubbleClose {
 		for (int i=0; i<bubbleList.size(); i++) {
 			scroller.fling(
 				bubbleParamList.get(i).x, bubbleParamList.get(i).y, velocityX, velocityY,
-				0, ChatBubbleHelper.getOptimizeWidth(),
-				0, ChatBubbleHelper.getOptimizeHeight());
+				30, ChatBubbleHelper.getOptimizeWidth()-30,
+				30, ChatBubbleHelper.getOptimizeHeight()-30, 30, 30);
 			ViewCompat.postInvalidateOnAnimation(bubbleList.get(i));
 		}
 	}

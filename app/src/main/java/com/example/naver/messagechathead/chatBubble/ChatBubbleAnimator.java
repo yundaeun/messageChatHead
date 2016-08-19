@@ -25,6 +25,7 @@ public class ChatBubbleAnimator {
 	public void setAnimation(int anim, ImageView icon, final View parentView, final boolean animationEnd) {
 		parentView.setVisibility(View.VISIBLE);
 		Animation animation = AnimationUtils.loadAnimation(context, anim);
+
 		animation.setAnimationListener(new Animation.AnimationListener() {
 			@Override
 			public void onAnimationStart(Animation animation) {
@@ -40,6 +41,11 @@ public class ChatBubbleAnimator {
 			public void onAnimationRepeat(Animation animation) {
 			}
 		});
+		icon.startAnimation(animation);
+	}
+
+	public void setAnimation(int anim, View icon) {
+		Animation animation = AnimationUtils.loadAnimation(context, anim);
 		icon.startAnimation(animation);
 	}
 }
