@@ -40,11 +40,9 @@ public class ChatBubbleFace extends ChatBubble {
 			if (chatRoomListView.getChatRoomListVisibility()) {
 				chatRoomListView.setChangeVisible();
 			} else {
-				// 오픈되어있는데 또누르면 ? 클로즈
-				chatBubbleClose.moveToTopAndRight(scroller);
+				chatBubbleClose.moveToTopAndRight();
 			}
 		} else {
-			// 클로즈에서 누르면? 오픈
 			chatBubbleClose.moveToUpAndArrangeBubbles();
 		}
 		chatRoomView.setChangeVisible();

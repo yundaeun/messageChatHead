@@ -23,11 +23,10 @@ public class ChatBubbleMore extends ChatBubble {
 	* */
 	@Override
 	public void moveFaceIcon(float distanceX, float distanceY) {
-		}
+	}
 
 	@Override
-	public void flingBubble(View view, OverScroller scroller, WindowManager.LayoutParams layoutParams, int velocityX,
-		int velocityY) {
+	public void flingBubble(View view, OverScroller scroller, WindowManager.LayoutParams layoutParams, int velocityX, int velocityY) {
 	}
 
 	@Override
@@ -36,8 +35,11 @@ public class ChatBubbleMore extends ChatBubble {
 
 	@Override
 	public void onClickChatBubble(OverScroller scroller) {
-		chatRoomView.setChangeVisible();
+		if (chatRoomListView.getChatRoomListVisibility()) {
+			//chatBubbleClose.moveToTopAndRight();
+		}
 		chatRoomListView.setChangeVisible();
+		chatRoomView.setChangeVisible();
 	}
 
 

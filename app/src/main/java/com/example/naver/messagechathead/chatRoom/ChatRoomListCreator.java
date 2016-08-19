@@ -3,7 +3,6 @@ package com.example.naver.messagechathead.chatRoom;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.ListView;
 import com.example.naver.messagechathead.R;
 import com.example.naver.messagechathead.adapter.ChatRoomListAdapter;
 import com.example.naver.messagechathead.data.ChatRoomListData;
-import com.example.naver.messagechathead.utils.ChatBubbleConfig;
 import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
@@ -21,7 +19,7 @@ import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 public class ChatRoomListCreator {
 	private Context context;
 	private WindowManager windowManager;
-	private View ChatRoomListView;
+	private View chatRoomListView;
 
 	public ChatRoomListCreator(Context context, WindowManager windowManager) {
 		this.context = context;
@@ -32,12 +30,12 @@ public class ChatRoomListCreator {
 		int dialogHeight = ChatBubbleHelper.displayHeight - bubbleSize - 65;
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		ChatRoomListView = layoutInflater.inflate(R.layout.chat_room_list_layout, null);
+		chatRoomListView = layoutInflater.inflate(R.layout.chat_room_list_layout, null);
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(context, windowManager);
-		chatBubbleHelper.attachLayout(ChatRoomListView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
+		chatBubbleHelper.attachLayout(chatRoomListView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
 			WindowManager.LayoutParams.TYPE_PHONE);
 
-		ListView chatRoomListView = (ListView)ChatRoomListView.findViewById(R.id.chat_room_listview);
+		ListView chatRoomListView = (ListView)this.chatRoomListView.findViewById(R.id.chat_room_listview);
 
 		ArrayList<ChatRoomListData> chatRoomList = new ArrayList<>();
 		chatRoomList.add(new ChatRoomListData("윤다은", "알겠습니다."));
@@ -53,16 +51,16 @@ public class ChatRoomListCreator {
 	}
 
 	public void setChangeVisible() {
-			if (ChatRoomListView.getVisibility() == View.GONE) {
-				ChatRoomListView.setVisibility(View.VISIBLE);
+			if (chatRoomListView.getVisibility() == View.GONE) {
+				chatRoomListView.setVisibility(View.VISIBLE);
 			} else {
-				ChatRoomListView.setVisibility(View.GONE);
+				chatRoomListView.setVisibility(View.GONE);
 			}
 	}
 
 	public boolean getChatRoomListVisibility() {
-		if (ChatRoomListView != null) {
-			if (ChatRoomListView.getVisibility() == View.VISIBLE) {
+		if (chatRoomListView != null) {
+			if (chatRoomListView.getVisibility() == View.VISIBLE) {
 
 				return true;
 			}

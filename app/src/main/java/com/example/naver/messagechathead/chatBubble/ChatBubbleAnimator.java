@@ -43,9 +43,4 @@ public class ChatBubbleAnimator {
 		});
 		icon.startAnimation(animation);
 	}
-
-	public void setAnimation(int anim, View icon) {
-		Animation animation = AnimationUtils.loadAnimation(context, anim);
-		icon.startAnimation(animation);
-	}
 }

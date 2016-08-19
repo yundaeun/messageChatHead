@@ -52,11 +52,14 @@ public class ChatBubbleDeleteBtn {
 	}
 
 	public void changeDeleteButtonForNear() {
+	//	chatBubbleAnimator.setAnimation(R.anim.zoom_in, deleteIcon, deleteView, false);
 		deleteIcon.setImageResource(R.drawable.bug);
 	}
 
 	public void changeDeleteButtonForFar() {
+		//chatBubbleAnimator.setAnimation(R.anim.zoom_out, deleteIcon, deleteView, false);
 		deleteIcon.setImageResource(R.drawable.image);
+
 	}
 
 	public void deleteAreaShow() {

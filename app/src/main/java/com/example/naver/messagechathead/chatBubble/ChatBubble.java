@@ -118,8 +118,6 @@ public abstract class ChatBubble extends RelativeLayout {
 		if (scroller.computeScrollOffset()) {
 			if (scroller.isFinished()) {
 				requestLayout();
-				ChatBubbleAnimator chatBubbleAnimator = new ChatBubbleAnimator(getContext());
-				chatBubbleAnimator.setAnimation(R.anim.bounce, ChatBubble.this);
 				if (checkDialogState()) {
 					moveToFirst(scroller, layoutParams);
 				}

@@ -33,6 +33,10 @@ public class ChatRoomCreator {
 		chatView = layoutInflater.inflate(R.layout.chat_view_layout, null);
 
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(context, windowManager);
+
+
+
+
 		chatBubbleHelper.attachLayout(chatView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
 			WindowManager.LayoutParams.TYPE_PHONE);
 

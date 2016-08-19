@@ -84,7 +84,7 @@ public class ChatBubbleClose {
 		return ChatBubbleHelper.getOptimizeWidth() - ChatBubbleHelper.getBubbleSize() * index;
 	}
 
-	public void moveToTopAndRight(OverScroller scroller) {
+	public void moveToTopAndRight() {
 		for (int i = 0; i < bubbleList.size(); i++) {
 			bubbleList.get(i).moveTo(ChatBubbleHelper.getOptimizeWidth(), 0);
 		}
