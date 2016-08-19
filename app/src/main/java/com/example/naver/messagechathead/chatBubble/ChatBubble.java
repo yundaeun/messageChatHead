@@ -9,68 +9,62 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.OverScroller;
 import android.widget.RelativeLayout;
+import com.example.naver.messagechathead.R;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
 import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
-import com.example.naver.messagechathead.R;
+import com.example.naver.messagechathead.service.ChatBubbleUIService;
 import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
- * Created by DAEUN on 16. 8. 11..
+ * Created by Naver on 16. 8. 18..
  */
-public class ChatBubble extends RelativeLayout {
-	private WindowManager windowManager;
-	private WindowManager.LayoutParams layoutParams;
+public abstract class ChatBubble extends RelativeLayout {
+	protected WindowManager windowManager;
+	protected WindowManager.LayoutParams layoutParams;
 	private GestureDetector gestureDetector;
-	private boolean bubbleFlag;
 	private OverScroller scroller;
 	private int bubbleSize;
-	private int prevXParams;
 	ChatBubbleDeleteBtn chatBubbleDeleteBtn;
-	ChatRoomCreator chatRoomCreator;
-	ChatRoomListCreator chatRoomListCreator;
+	ChatRoomListCreator chatRoomListView;
+	ChatRoomCreator chatRoomView;
 	ChatBubbleOpen chatBubbleOpen;
 	ChatBubbleClose chatBubbleClose;
+	ImageView faceIcon;
 
-
-	public ChatBubble(boolean bubbleFlag, Context context, WindowManager windowManager,
-		ChatBubbleDeleteBtn chatBubbleDeleteBtn) {
+	public ChatBubble(Context context, WindowManager windowManager, ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator, ChatRoomListCreator chatRoomListCreator) {
 		super(context);
-		this.bubbleFlag = bubbleFlag;
 		this.windowManager = windowManager;
 		this.chatBubbleDeleteBtn = chatBubbleDeleteBtn;
+		this.chatRoomView = chatRoomCreator;
+		this.chatRoomListView = chatRoomListCreator;
+	}
+
+	public void setImageResource(int resourceId) {
+		faceIcon.setImageResource(resourceId);
 	}
 
 	public void init() {
 		bubbleSize = ChatBubbleHelper.getBubbleSize();
-
-		inflate(getContext(), R.layout.face_icon_layout, this);
+		faceIcon = (ImageView) inflate(getContext(), R.layout.face_icon_layout, null);
+		addView(faceIcon);
 		layoutParams = attachLayout(this, Gravity.START | Gravity.TOP, bubbleSize);
 		ChatBubbleContainer.addChatBubbleParams(layoutParams);
 
 		gestureDetector = new GestureDetector(getContext(), new SimpleGestureListener());
 		scroller = new OverScroller(getContext());
 
-		// 하나의 버블 당 하나의 채팅방을 갖는다.
-		if (bubbleFlag) {
-			chatRoomCreator = new ChatRoomCreator(getContext(), windowManager);
-			setVisibility(View.VISIBLE);
-			//		} else {
-			//			chatRoomListCreator = new ChatRoomListCreator(getContext(), windowManager);
-			//			setVisibility(View.GONE);
-		}
 		chatBubbleOpen = new ChatBubbleOpen();
 		chatBubbleClose = new ChatBubbleClose();
 	}
 
 	public boolean checkDialogState() {
-		if (chatRoomCreator.getChatRoomVisibility()) {// || (chatRoomListCreator.getChatRoomListVisibility())) {
-			return true;
-		} else {
-			return false;
-		}
+		Log.d("yde", "yde checkDialogState : " + chatRoomListView.getChatRoomListVisibility() + ",  " + chatRoomView.getChatRoomVisibility());
+		return chatRoomListView.getChatRoomListVisibility() || chatRoomView.getChatRoomVisibility();
 	}
+
 	private WindowManager.LayoutParams attachLayout(View view, int location, int size) {
 		WindowManager.LayoutParams params =
 			new WindowManager.LayoutParams(size, size, WindowManager.LayoutParams.TYPE_PRIORITY_PHONE,
@@ -82,8 +76,10 @@ public class ChatBubble extends RelativeLayout {
 		return params;
 	}
 
-	public void moveTo(int finalX, int finalY, WindowManager.LayoutParams layoutParams) {
-		scroller.startScroll(layoutParams.x, layoutParams.y, finalX, finalY);
+	public void moveTo(int finalX, int finalY) {
+		scroller.forceFinished(true);
+		scroller.startScroll(layoutParams.x, layoutParams.y, finalX - layoutParams.x, finalY - layoutParams.y);
+		ViewCompat.postInvalidateOnAnimation(this);
 	}
 
 	@Override
@@ -91,7 +87,7 @@ public class ChatBubble extends RelativeLayout {
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_UP:
 				if (checkDialogState()) {
-					chatBubbleOpen.moveToStart(scroller, layoutParams);
+					moveToFirst(scroller, layoutParams);
 				} else {
 					chatBubbleClose.moveToLeftOrRight(scroller);
 				}
@@ -109,8 +105,8 @@ public class ChatBubble extends RelativeLayout {
 
 	private void serviceStopWithDeleteBtn() {
 		if (chatBubbleDeleteBtn.isOverlayDeleteArea(layoutParams)) {
-			//TODO chatRoom GONE
-			setVisibility(View.GONE);
+			ChatBubbleUIService chatBubbleUIService = new ChatBubbleUIService();
+			chatBubbleUIService.stopService();
 		}
 		chatBubbleDeleteBtn.deleteAreaHide();
 	}
@@ -120,6 +116,9 @@ public class ChatBubble extends RelativeLayout {
 		if (scroller.computeScrollOffset()) {
 			if (scroller.isFinished()) {
 				requestLayout();
+				if (checkDialogState()) {
+					moveToFirst(scroller, layoutParams);
+				}
 			} else {
 				if (checkDialogState()) {
 					chatBubbleOpen.scrollBubble(this, scroller, windowManager, layoutParams);
@@ -133,7 +132,7 @@ public class ChatBubble extends RelativeLayout {
 
 	private void fling(int velocityX, int velocityY) {
 		if (checkDialogState()) {
-			chatBubbleOpen.updateViewBubble(this, scroller, layoutParams, velocityX, velocityY);
+			flingBubble(this, scroller, layoutParams, velocityX, velocityY);
 		} else {
 			chatBubbleClose.flingBubbles(scroller, velocityX, velocityY);
 		}
@@ -143,25 +142,19 @@ public class ChatBubble extends RelativeLayout {
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 			scroller.forceFinished(true);
-			fling((int)velocityX/3, (int)velocityY/3 );
+			fling((int)velocityX / 3, (int)velocityY / 3 );
 			return true;
 		}
 
 		@Override
 		public boolean onSingleTapConfirmed(MotionEvent e) {
-			if (checkDialogState()) {
-				chatBubbleClose.moveToTopAndRight(scroller);
-			} else {
-				chatBubbleClose.moveToUpAndArrangeBubbles(scroller);
-
-			}
-			chatRoomCreator.setChangeVisible();
+			scroller.forceFinished(true);
+			onClickChatBubble(scroller);
 			return true;
 		}
 
 		@Override
 		public boolean onDown(MotionEvent e) {
-			prevXParams = layoutParams.x;
 			chatBubbleDeleteBtn.deleteAreaShow();
 			scroller.forceFinished(true);
 			return true;
@@ -174,26 +167,18 @@ public class ChatBubble extends RelativeLayout {
 			return true;
 		}
 
-		private void moveFaceIcon(float distanceX, float distanceY) {
-			if (checkDialogState()) {
-				chatBubbleOpen.updateViewBubble(ChatBubble.this, windowManager, layoutParams, distanceX, distanceY);
-			} else {
-				chatBubbleClose.updateViewBubbles(windowManager, distanceX, distanceY);
-			}
-		}
-
 		private void changeDeleteButtonImage() {
 			boolean deleteArea = chatBubbleDeleteBtn.isOverlayDeleteArea(layoutParams);
 			if (deleteArea) {
-				Log.d("Yde", "yde delete near");
 				chatBubbleDeleteBtn.changeDeleteButtonForNear();
 			} else {
-				Log.d("Yde", "yde delete far");
 				chatBubbleDeleteBtn.changeDeleteButtonForFar();
 			}
 		}
 	}
 
-
+	public abstract void moveFaceIcon(float distanceX, float distanceY);
+	public abstract void moveToFirst(OverScroller scroller, WindowManager.LayoutParams layoutParams);
+	public abstract void onClickChatBubble(OverScroller scroller);
+	public abstract void flingBubble(View view, OverScroller scroller, WindowManager.LayoutParams layoutParams, int velocityX, int velocityY);
 }
-

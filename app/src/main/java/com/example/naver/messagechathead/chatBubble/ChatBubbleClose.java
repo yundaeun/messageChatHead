@@ -2,6 +2,7 @@ package com.example.naver.messagechathead.chatBubble;
 
 import java.util.ArrayList;
 import android.support.v4.view.ViewCompat;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.OverScroller;
 import com.example.naver.messagechathead.utils.ChatBubbleHelper;
@@ -73,22 +74,19 @@ public class ChatBubbleClose {
 		}
 	}
 
-	public void moveToUpAndArrangeBubbles(OverScroller scroller) {
-		int finalX = ChatBubbleHelper.getOptimizeWidth() - bubbleParamList.get(bubbleList.size() - 1).x;
-		for (int i = bubbleList.size() - 1; i >= 0; i--) {
-			int finalY = -bubbleParamList.get(i).y;
-			bubbleList.get(i).moveTo(finalX, finalY, bubbleParamList.get(i));
-			ViewCompat.postInvalidateOnAnimation(bubbleList.get(i));
-			finalX -= ChatBubbleHelper.getBubbleSize();
+	public void moveToUpAndArrangeBubbles() {
+		for (int i = 0; i < bubbleList.size(); i++) {
+			bubbleList.get(i).moveTo(getXWhenOpen(bubbleList.size()-i-1), 0);
 		}
+	}
+
+	public int getXWhenOpen(int index) {
+		return ChatBubbleHelper.getOptimizeWidth() - ChatBubbleHelper.getBubbleSize() * index;
 	}
 
 	public void moveToTopAndRight(OverScroller scroller) {
 		for (int i = 0; i < bubbleList.size(); i++) {
-			int finalX = ChatBubbleHelper.getOptimizeWidth() - bubbleParamList.get(i).x;
-			int finalY = -bubbleParamList.get(i).y;
-			bubbleList.get(i).moveTo(finalX, finalY, bubbleParamList.get(i));
-			ViewCompat.postInvalidateOnAnimation(bubbleList.get(i));
+			bubbleList.get(i).moveTo(ChatBubbleHelper.getOptimizeWidth(), 0);
 		}
 	}
 }

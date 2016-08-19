@@ -23,7 +23,7 @@ public class ChatBubbleOpen  {
 		scroller.startScroll(layoutParams.x, layoutParams.y, finalX, finalY);
 	}
 
-	public void updateViewBubble(View view, OverScroller scroller, WindowManager.LayoutParams layoutParams, int velocityX, int velocityY) {
+	public void flingBubble(View view, OverScroller scroller, WindowManager.LayoutParams layoutParams, int velocityX, int velocityY) {
 		scroller.fling(
 			layoutParams.x, layoutParams.y, velocityX, velocityY,
 			0, ChatBubbleHelper.getOptimizeWidth(),
@@ -37,7 +37,7 @@ public class ChatBubbleOpen  {
 		windowManager.updateViewLayout(view, layoutParams);
 	}
 
-	public void updateViewBubble(View view, WindowManager windowManager, WindowManager.LayoutParams layoutParams, float distanceX,
+	public void flingBubble(View view, WindowManager windowManager, WindowManager.LayoutParams layoutParams, float distanceX,
 		float distanceY) {
 		layoutParams.x -= (int)distanceX;
 		layoutParams.y -= (int)distanceY;

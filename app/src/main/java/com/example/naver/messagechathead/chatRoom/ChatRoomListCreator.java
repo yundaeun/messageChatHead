@@ -53,13 +53,11 @@ public class ChatRoomListCreator {
 	}
 
 	public void setChangeVisible() {
-		if (ChatRoomListView != null) {
 			if (ChatRoomListView.getVisibility() == View.GONE) {
 				ChatRoomListView.setVisibility(View.VISIBLE);
 			} else {
 				ChatRoomListView.setVisibility(View.GONE);
 			}
-		}
 	}
 
 	public boolean getChatRoomListVisibility() {

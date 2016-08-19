@@ -16,13 +16,13 @@ import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 /**
  * Created by Naver on 16. 8. 12..
  */
-public class ChatRoomCreator extends LinearLayout {
+public class ChatRoomCreator {
+	private Context context;
 	private WindowManager windowManager;
 	private View chatView;
-	private ArrayList<View> chatRoomList;
 
 	public ChatRoomCreator(Context context, WindowManager windowManager) {
-		super(context);
+		this.context = context;
 		this.windowManager = windowManager;
 
 		int bubbleSize = ChatBubbleHelper.getBubbleSize();
@@ -35,28 +35,19 @@ public class ChatRoomCreator extends LinearLayout {
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(context, windowManager);
 		chatBubbleHelper.attachLayout(chatView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
 			WindowManager.LayoutParams.TYPE_PHONE);
-		ChatBubbleContainer.addChatRoom(chatView);
 
-		chatRoomList = ChatBubbleContainer.getChatRoomList();
 	}
 
 	public void setChangeVisible() {
-		for (int i = 0; i < chatRoomList.size(); i++) {
-			if (chatRoomList.get(i).getVisibility() == View.GONE) {
-				chatRoomList.get(i).setVisibility(View.VISIBLE);
-			} else if (chatRoomList.get(i).getVisibility() == View.VISIBLE) {
-				chatRoomList.get(i).setVisibility(View.GONE);
-			}
+		if (chatView.getVisibility() == View.GONE) {
+			chatView.setVisibility(View.VISIBLE);
+		} else if (chatView.getVisibility() == View.VISIBLE){
+			chatView.setVisibility(View.GONE);
 		}
 	}
 
 	public boolean getChatRoomVisibility() {
-		for (int i = 0; i < chatRoomList.size(); i++) {
-			if (chatRoomList.get(i).getVisibility() == View.VISIBLE) {
-				return true;
-			}
-		}
-		return false;
+		return chatView.getVisibility() == View.VISIBLE;
 	}
 
 }
