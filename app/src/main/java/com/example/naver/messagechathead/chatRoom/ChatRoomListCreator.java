@@ -3,6 +3,7 @@ package com.example.naver.messagechathead.chatRoom;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,12 +60,12 @@ public class ChatRoomListCreator {
 	}
 
 	public boolean getChatRoomListVisibility() {
-		if (chatRoomListView != null) {
-			if (chatRoomListView.getVisibility() == View.VISIBLE) {
-
-				return true;
-			}
+		if (chatRoomListView.getVisibility() == View.VISIBLE) {
+		//	Log.d("Yde", "yde visible");
+			return true;
 		}
+
+	//	Log.d("Yde", "yde gone");
 		return false;
 	}
 }

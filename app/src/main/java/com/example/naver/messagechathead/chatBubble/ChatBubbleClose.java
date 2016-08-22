@@ -1,92 +1,109 @@
 package com.example.naver.messagechathead.chatBubble;
 
 import java.util.ArrayList;
+
+import android.content.Context;
 import android.support.v4.view.ViewCompat;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
-import android.widget.OverScroller;
+import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
+import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
 import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
  * Created by Naver on 16. 8. 17..
  */
-public class ChatBubbleClose {
+public class ChatBubbleClose extends ChatBubble {
 
-	private ArrayList<ChatBubble> bubbleList;
-	private ArrayList<WindowManager.LayoutParams> bubbleParamList;
+	ChatBubbleContainer chatBubbleContainer;
 
-	public ChatBubbleClose() {
-		bubbleList = ChatBubbleContainer.getBubbleList();
-		bubbleParamList = ChatBubbleContainer.getBubbleParams();
+	public ChatBubbleClose(Context context, WindowManager windowManager,
+		ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator,
+		ChatRoomListCreator chatRoomListCreator) {
+		super(context, windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator);
+
+		chatBubbleContainer = new ChatBubbleContainer();
 	}
 
-	public void moveToLeftOrRight(OverScroller scroller) {
-		if (isLeftSide()) {
-			moveToLeft(scroller);
+	@Override
+	public void moveBubbleOnEventUp(WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList) {
+		if (isLeftSide(bubbleList)) {
+			moveToLeft();
 		} else {
-			moveToRight(scroller);
+			moveToRight();
 		}
 	}
 
-	private boolean isLeftSide() {
-		return bubbleParamList.get(0).x + ChatBubbleHelper.getBubbleSize() / 2 < ChatBubbleHelper.getDisplayCenter();
+	private boolean isLeftSide(ArrayList<ChatBubble> bubbleList) {
+		return bubbleList.get(0).layoutParams.x + ChatBubbleHelper.getBubbleSize() / 2 < ChatBubbleHelper.getDisplayCenter();
 	}
 
-	private void moveToLeft(OverScroller scroller) {
-		scroller.startScroll(bubbleParamList.get(0).x, bubbleParamList.get(0).y, -bubbleParamList.get(0).x, 0);
+	private void moveToLeft() {
+		moveTo(0, bubbleList.get(0).layoutParams.y);
 	}
 
-	private void moveToRight(OverScroller scroller) {
-		scroller.startScroll(bubbleParamList.get(0).x, bubbleParamList.get(0).y, ChatBubbleHelper.getOptimizeWidth() - bubbleParamList.get(0).x, 0);
+	private void moveToRight() {
+		moveTo(ChatBubbleHelper.getOptimizeWidth(), bubbleList.get(0).layoutParams.y);
 	}
 
-	public void scrollBubbles(OverScroller scroller, WindowManager windowManager) {
+	@Override
+	public void scrollToStartOnScrollIsFinished(WindowManager.LayoutParams layoutParams) {
+	}
+
+	@Override
+	public void scrollBubbleOnComputeScroll(View view, WindowManager windowManager,
+		WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList) {
 		if (bubbleList == null) {
 		} else {
-			for (int i = 0; i < bubbleList.size(); i++) {
-				bubbleParamList.get(i).x = scroller.getCurrX();
-				bubbleParamList.get(i).y = scroller.getCurrY();
-				windowManager.updateViewLayout(bubbleList.get(i), bubbleParamList.get(i));
+			for (ChatBubble bubble : bubbleList) {
+				bubble.layoutParams.x = scroller.getCurrX();
+				bubble.layoutParams.y = scroller.getCurrY();
+				windowManager.updateViewLayout(bubble, bubble.layoutParams);
 			}
 		}
 	}
 
-	public void flingBubbles(OverScroller scroller, int velocityX, int velocityY) {
-		for (int i=0; i<bubbleList.size(); i++) {
+	@Override
+	public void flingBubble(View view, WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList, int velocityX, int velocityY) {
+		for (ChatBubble bubbles : bubbleList) {
 			scroller.fling(
-				bubbleParamList.get(i).x, bubbleParamList.get(i).y, velocityX, velocityY,
+				bubbles.layoutParams.x, bubbles.layoutParams.y, velocityX, velocityY,
 				30, ChatBubbleHelper.getOptimizeWidth()-30,
 				30, ChatBubbleHelper.getOptimizeHeight()-30, 30, 30);
-			ViewCompat.postInvalidateOnAnimation(bubbleList.get(i));
+			ViewCompat.postInvalidateOnAnimation(bubbles);
 		}
 	}
 
-	public void updateViewBubbles(WindowManager windowManager, float distanceX, float distanceY) {
+	@Override
+	public void scrollBubble(ChatBubble view, ArrayList<ChatBubble> bubbleList, float distanceX, float distanceY) {
 		for (int i = bubbleList.size()-1; i >= 0; i--) {
 			if (i == bubbleList.size()-1) {
-				bubbleParamList.get(i).x -= (int)distanceX;
-				bubbleParamList.get(i).y -= (int)distanceY;
+				bubbleList.get(i).layoutParams.x -= (int)distanceX;
+				bubbleList.get(i).layoutParams.y -= (int)distanceY;
 			} else {
-				bubbleParamList.get(i).x = bubbleParamList.get(i+1).x + (int)distanceX;
-				bubbleParamList.get(i).y = bubbleParamList.get(i+1).y + (int)distanceY;
+				bubbleList.get(i).layoutParams.x = bubbleList.get(i+1).layoutParams.x + (int)distanceX;
+				bubbleList.get(i).layoutParams.y = bubbleList.get(i+1).layoutParams.y + (int)distanceY;
 			}
-			windowManager.updateViewLayout(bubbleList.get(i), bubbleParamList.get(i));
+			windowManager.updateViewLayout(bubbleList.get(i), bubbleList.get(i).layoutParams);
 		}
 	}
 
-	public void moveToUpAndArrangeBubbles() {
-		for (int i = 0; i < bubbleList.size(); i++) {
-			bubbleList.get(i).moveTo(getXWhenOpen(bubbleList.size()-i-1), 0);
+	@Override
+	public void changeBubbleState() {
+		chatBubbleContainer.changeToOpenBubbleList();
+		changeChatRoomViewVisibility();
+		for (int i = 0; i < chatBubbleContainer.getBubbleList().size(); i++) {
+			chatBubbleContainer.getBubbleList().get(i).moveTo(getXWhenOpen(chatBubbleContainer.getBubbleList().size()-i-1), 0);
 		}
+	}
+
+	private void changeChatRoomViewVisibility() {
+		chatRoomView.setChangeVisible();
 	}
 
 	public int getXWhenOpen(int index) {
 		return ChatBubbleHelper.getOptimizeWidth() - ChatBubbleHelper.getBubbleSize() * index;
 	}
 
-	public void moveToTopAndRight() {
-		for (int i = 0; i < bubbleList.size(); i++) {
-			bubbleList.get(i).moveTo(ChatBubbleHelper.getOptimizeWidth(), 0);
-		}
-	}
 }

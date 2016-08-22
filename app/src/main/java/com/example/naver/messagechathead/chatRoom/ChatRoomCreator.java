@@ -34,9 +34,6 @@ public class ChatRoomCreator {
 
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(context, windowManager);
 
-
-
-
 		chatBubbleHelper.attachLayout(chatView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
 			WindowManager.LayoutParams.TYPE_PHONE);
 
@@ -45,8 +42,12 @@ public class ChatRoomCreator {
 	public void setChangeVisible() {
 		if (chatView.getVisibility() == View.GONE) {
 			chatView.setVisibility(View.VISIBLE);
+			Log.d("yde", "yde chatview visible");
+
 		} else if (chatView.getVisibility() == View.VISIBLE){
 			chatView.setVisibility(View.GONE);
+			Log.d("yde", "yde chatview gone");
+
 		}
 	}
 

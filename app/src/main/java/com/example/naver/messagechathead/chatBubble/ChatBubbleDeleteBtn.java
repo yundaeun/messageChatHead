@@ -7,6 +7,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import com.example.naver.messagechathead.R;
 import com.example.naver.messagechathead.utils.ChatBubbleConfig;
@@ -20,13 +22,11 @@ public class ChatBubbleDeleteBtn {
 	private WindowManager windowManager;
 	private View deleteView;
 	private ImageView deleteIcon;
-	private ChatBubbleAnimator chatBubbleAnimator;
 	private int bubbleSize;
 
 	public ChatBubbleDeleteBtn(Context context, WindowManager windowManager) {
 		this.context = context;
 		this.windowManager = windowManager;
-		chatBubbleAnimator = new ChatBubbleAnimator(context);
 	}
 
 	public void init() {
@@ -63,10 +63,32 @@ public class ChatBubbleDeleteBtn {
 	}
 
 	public void deleteAreaShow() {
-		chatBubbleAnimator.setAnimation(R.anim.slide_up_in, deleteIcon, deleteView, false);
+		setAnimation(R.anim.slide_up_in, deleteIcon, deleteView, false);
 	}
 
 	public void deleteAreaHide() {
-		chatBubbleAnimator.setAnimation(R.anim.slide_down_out, deleteIcon, deleteView, true);
+		setAnimation(R.anim.slide_down_out, deleteIcon, deleteView, true);
+	}
+
+	public void setAnimation(int anim, ImageView icon, final View parentView, final boolean animationEnd) {
+		parentView.setVisibility(View.VISIBLE);
+		Animation animation = AnimationUtils.loadAnimation(context, anim);
+
+		animation.setAnimationListener(new Animation.AnimationListener() {
+			@Override
+			public void onAnimationStart(Animation animation) {
+			}
+
+			public void onAnimationEnd(Animation animation) {
+				if (animationEnd) {
+					parentView.setVisibility(View.GONE);
+				}
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+		});
+		icon.startAnimation(animation);
 	}
 }
