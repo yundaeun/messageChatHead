@@ -21,7 +21,7 @@ public class ChatBubbleMore extends ChatBubbleOpen{
 	}
 
 	@Override
-	public void moveBubbleOnEventUp(WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList) {
+	public void moveBubbleOnActionUp(WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList) {
 	}
 
 	@Override

@@ -90,7 +90,7 @@ public abstract class ChatBubble extends RelativeLayout {
 	public boolean onTouchEvent(MotionEvent event) {
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_UP:
-				moveBubbleOnEventUp(layoutParams, bubbleList);
+				moveBubbleOnActionUp(layoutParams, bubbleList);
 				serviceStopWithDeleteBtn();
 				break;
 		}
@@ -167,7 +167,7 @@ public abstract class ChatBubble extends RelativeLayout {
 		}
 	}
 
-	public abstract void moveBubbleOnEventUp(WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList);
+	public abstract void moveBubbleOnActionUp(WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList);
 	public abstract void scrollToStartOnScrollIsFinished(WindowManager.LayoutParams layoutParams);
 	public abstract void scrollBubbleOnComputeScroll(View view, WindowManager windowManager, WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList);
 	public abstract void flingBubble(View view, WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList, int velocityX, int velocityY);

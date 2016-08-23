@@ -26,7 +26,7 @@ public class ChatBubbleClose extends ChatBubble {
 	}
 
 	@Override
-	public void moveBubbleOnEventUp(WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList) {
+	public void moveBubbleOnActionUp(WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList) {
 		if (isLeftSide(bubbleList)) {
 			moveToLeft();
 		} else {
@@ -39,11 +39,11 @@ public class ChatBubbleClose extends ChatBubble {
 	}
 
 	private void moveToLeft() {
-		moveTo(0, bubbleList.get(0).layoutParams.y);
+		moveTo(-30, bubbleList.get(0).layoutParams.y);
 	}
 
 	private void moveToRight() {
-		moveTo(ChatBubbleHelper.getOptimizeWidth(), bubbleList.get(0).layoutParams.y);
+		moveTo(ChatBubbleHelper.getOptimizeWidth() + 30, bubbleList.get(0).layoutParams.y);
 	}
 
 	@Override

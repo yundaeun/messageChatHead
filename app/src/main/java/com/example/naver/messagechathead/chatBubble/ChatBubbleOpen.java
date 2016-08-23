@@ -24,7 +24,7 @@ public abstract class ChatBubbleOpen extends ChatBubble {
 	}
 
 	@Override
-	public void moveBubbleOnEventUp(WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList) {
+	public void moveBubbleOnActionUp(WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList) {
 		moveTo(ChatBubbleHelper.getOptimizeWidth(), 0);
 	}
 
