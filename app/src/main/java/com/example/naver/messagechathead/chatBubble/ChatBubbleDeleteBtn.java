@@ -45,9 +45,11 @@ public class ChatBubbleDeleteBtn {
 		int[] location = new int[2];
 		deleteIcon.getLocationOnScreen(location);
 		int minWidth = location[0] - deleteIcon.getWidth();
-		int minHeight = location[1] - deleteIcon.getHeight();
 		int maxWidth = location[0] + deleteIcon.getWidth();
+
+		int minHeight = location[1] - (ChatBubbleHelper.getBubbleSize() + deleteIcon.getHeight());
 		int maxHeight = location[1] + deleteIcon.getHeight();
+
 		return faceIconParams.x < maxWidth && faceIconParams.x > minWidth && faceIconParams.y < maxHeight && faceIconParams.y > minHeight;
 	}
 

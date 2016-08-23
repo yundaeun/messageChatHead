@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.support.v4.view.ViewCompat;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -12,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.OverScroller;
 import android.widget.RelativeLayout;
+import com.bumptech.glide.Glide;
 import com.example.naver.messagechathead.R;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
 import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
@@ -42,26 +44,28 @@ public abstract class ChatBubble extends RelativeLayout {
 		this.chatRoomListView = chatRoomListCreator;
 	}
 
-	public void setImageResource(int resourceId) {
+	public void setImageURL() {
+		Glide.with(getContext())
+			.load("http://inthecheesefactory.com/uploads/source/glidepicasso/cover.jpg")
+			.centerCrop()
+			.override(280, 280)
+			.transform(new RoundImageTransform(getContext()))
+			.into(faceIcon);
 	}
 
 	public void init() {
 		bubbleSize = ChatBubbleHelper.getBubbleSize();
 		faceIcon = (ImageView) inflate(getContext(), R.layout.face_icon_layout, null);
-
-
-
-
-
-
-
 		addView(faceIcon);
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(getContext(), windowManager);
 		chatBubbleHelper.attachLayout(this, Gravity.START | Gravity.TOP, View.VISIBLE, bubbleSize, bubbleSize, WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
 		gestureDetector = new GestureDetector(getContext(), new SimpleGestureListener());
 		scroller = new OverScroller(getContext());
+
 		layoutParams = (WindowManager.LayoutParams)this.getLayoutParams();
 		bubbleList = chatBubbleContainer.getBubbleCloseList();
+		setImageURL();
+
 	}
 
 	public void moveTo(int finalX, int finalY) {
@@ -94,8 +98,9 @@ public abstract class ChatBubble extends RelativeLayout {
 
 	private void serviceStopWithDeleteBtn() {
 		if (chatBubbleDeleteBtn.isOverlayDeleteArea(layoutParams)) {
-			ChatBubbleUIService chatBubbleUIService = new ChatBubbleUIService();
-			chatBubbleUIService.stopService();
+			//ChatBubbleUIService chatBubbleUIService = new ChatBubbleUIService();
+			//chatBubbleUIService.stopService();
+			Log.d("yde", "yde service stop");
 		}
 		chatBubbleDeleteBtn.deleteAreaHide();
 	}
