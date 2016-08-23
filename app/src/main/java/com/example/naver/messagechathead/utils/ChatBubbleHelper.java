@@ -26,7 +26,7 @@ public class ChatBubbleHelper {
 	public WindowManager.LayoutParams attachLayoutOnBubbleOpen(View view, int location, int visibilty, int width, int height, int type) {
 		WindowManager.LayoutParams params =
 			new WindowManager.LayoutParams(width, height, type,
-				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
 				PixelFormat.TRANSPARENT);
 		params.gravity = location;
 		windowManager = (WindowManager)context.getSystemService(context.WINDOW_SERVICE);

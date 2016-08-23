@@ -3,7 +3,8 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/round_layout">
+        android:background="@drawable/round_layout"
+        android:weightSum="1">
 
         <TextView
                 android:layout_width="wrap_content"
@@ -23,16 +24,31 @@
                 android:background="@android:color/darker_gray"/>
 
         <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.00">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Small Text"
+                        android:layout_margin="20dp"
+                        android:id="@+id/textView2" />
+        </LinearLayout>
+
+        <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_margin="10dp"
                 android:weightSum="1">
 
                 <EditText
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:id="@+id/editText"
-                        android:inputType=""
                         android:layout_weight="0.98" />
 
                 <ImageView
