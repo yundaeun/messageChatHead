@@ -103,12 +103,10 @@ public class ChatBubbleContainer {
 	}
 
 	public int getParamsXBeforeBubbleOpen() {
-		Log.d("yde", "yde x : " + prev_param_x);
 		return prev_param_x;
 	}
 
 	public int getParamsYBeforeBubbleOpen() {
-		Log.d("yde", "yde y : " + prev_param_y);
 		return prev_param_y;
 	}
 }

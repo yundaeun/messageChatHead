@@ -68,8 +68,8 @@ public class ChatBubbleClose extends ChatBubble {
 		for (ChatBubble bubbles : bubbleList) {
 			scroller.fling(
 				bubbles.layoutParams.x, bubbles.layoutParams.y, velocityX, velocityY,
-				30, ChatBubbleHelper.getOptimizeWidth()-30,
-				30, ChatBubbleHelper.getOptimizeHeight()-30, 30, 30);
+				+ 30, ChatBubbleHelper.getOptimizeWidth() - 30,
+				+ 30, ChatBubbleHelper.getOptimizeHeight() - 30, 30, 30);
 			ViewCompat.postInvalidateOnAnimation(bubbles);
 		}
 	}

@@ -17,8 +17,8 @@ import com.bumptech.glide.Glide;
 import com.example.naver.messagechathead.R;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
 import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
-import com.example.naver.messagechathead.service.ChatBubbleUIService;
 import com.example.naver.messagechathead.utils.ChatBubbleHelper;
+import com.example.naver.messagechathead.utils.RoundImageTransform;
 
 /**
  * Created by Naver on 16. 8. 18..
@@ -48,7 +48,7 @@ public abstract class ChatBubble extends RelativeLayout {
 		Glide.with(getContext())
 			.load("http://inthecheesefactory.com/uploads/source/glidepicasso/cover.jpg")
 			.centerCrop()
-			.override(280, 280)
+			.override(bubbleSize, bubbleSize)
 			.transform(new RoundImageTransform(getContext()))
 			.into(faceIcon);
 	}
@@ -58,7 +58,13 @@ public abstract class ChatBubble extends RelativeLayout {
 		faceIcon = (ImageView) inflate(getContext(), R.layout.face_icon_layout, null);
 		addView(faceIcon);
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(getContext(), windowManager);
-		chatBubbleHelper.attachLayout(this, Gravity.START | Gravity.TOP, View.VISIBLE, bubbleSize, bubbleSize, WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
+
+
+		chatBubbleHelper.attachLayoutOnBubbleOpen(this, Gravity.START | Gravity.TOP, View.VISIBLE, bubbleSize, bubbleSize, WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
+
+
+
+
 		gestureDetector = new GestureDetector(getContext(), new SimpleGestureListener());
 		scroller = new OverScroller(getContext());
 

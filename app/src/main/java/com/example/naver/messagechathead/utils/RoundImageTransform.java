@@ -1,4 +1,4 @@
-package com.example.naver.messagechathead.chatBubble;
+package com.example.naver.messagechathead.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -23,8 +23,7 @@ public class ChatBubbleHelper {
 		getDisplaySize();
 	}
 
-	public WindowManager.LayoutParams attachLayout(View view, int location, int visibilty, int width, int height,
-		int type) {
+	public WindowManager.LayoutParams attachLayoutOnBubbleOpen(View view, int location, int visibilty, int width, int height, int type) {
 		WindowManager.LayoutParams params =
 			new WindowManager.LayoutParams(width, height, type,
 				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,

@@ -20,7 +20,6 @@ public abstract class ChatBubbleOpen extends ChatBubble {
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator,
 		ChatRoomListCreator chatRoomListCreator) {
 		super(context, windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator);
-
 		chatBubbleContainer = new ChatBubbleContainer(windowManager);
 	}
 

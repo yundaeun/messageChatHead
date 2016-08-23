@@ -1,8 +1,6 @@
 package com.example.naver.messagechathead.chatBubble;
 
 import android.content.Context;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +9,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import com.example.naver.messagechathead.R;
-import com.example.naver.messagechathead.utils.ChatBubbleConfig;
 import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
@@ -37,7 +34,7 @@ public class ChatBubbleDeleteBtn {
 		deleteView = layoutInflater.inflate(R.layout.delete_icon_layout, null);
 		deleteIcon = (ImageView)deleteView.findViewById(R.id.deleteImage);
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(context, windowManager);
-		chatBubbleHelper.attachLayout(deleteView, Gravity.BOTTOM | Gravity.CENTER, View.GONE, bubbleSize, bubbleSize,
+		chatBubbleHelper.attachLayoutOnBubbleOpen(deleteView, Gravity.BOTTOM | Gravity.CENTER, View.GONE, bubbleSize, bubbleSize,
 			WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
 	}
 

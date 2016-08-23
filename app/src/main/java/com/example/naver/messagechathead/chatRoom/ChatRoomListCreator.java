@@ -3,7 +3,6 @@ package com.example.naver.messagechathead.chatRoom;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,13 +26,13 @@ public class ChatRoomListCreator {
 		this.windowManager = windowManager;
 
 		int bubbleSize = ChatBubbleHelper.getBubbleSize();
-		int dialogWidth = ChatBubbleHelper.displayWidth - 65;
+		int dialogWidth = ChatBubbleHelper.displayWidth;
 		int dialogHeight = ChatBubbleHelper.displayHeight - bubbleSize - 65;
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		chatRoomListView = layoutInflater.inflate(R.layout.chat_room_list_layout, null);
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(context, windowManager);
-		chatBubbleHelper.attachLayout(chatRoomListView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
+		chatBubbleHelper.attachLayoutOnBubbleOpen(chatRoomListView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
 			WindowManager.LayoutParams.TYPE_PHONE);
 
 		ListView chatRoomListView = (ListView)this.chatRoomListView.findViewById(R.id.chat_room_listview);
@@ -60,12 +59,6 @@ public class ChatRoomListCreator {
 	}
 
 	public boolean getChatRoomListVisibility() {
-		if (chatRoomListView.getVisibility() == View.VISIBLE) {
-		//	Log.d("Yde", "yde visible");
-			return true;
-		}
-
-	//	Log.d("Yde", "yde gone");
-		return false;
+		return chatRoomListView.getVisibility() == View.VISIBLE;
 	}
 }
