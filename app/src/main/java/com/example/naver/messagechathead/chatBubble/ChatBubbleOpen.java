@@ -1,13 +1,13 @@
 package com.example.naver.messagechathead.chatBubble;
 
-	import java.util.ArrayList;
+import java.util.ArrayList;
 
-	import android.content.Context;
-	import android.view.View;
-	import android.view.WindowManager;
-	import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
-	import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
-	import com.example.naver.messagechathead.utils.ChatBubbleHelper;
+import android.content.Context;
+import android.view.View;
+import android.view.WindowManager;
+import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
+import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
+import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
  * Created by DAEUN on 16. 8. 11..
@@ -21,7 +21,7 @@ public abstract class ChatBubbleOpen extends ChatBubble {
 		ChatRoomListCreator chatRoomListCreator) {
 		super(context, windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator);
 
-		chatBubbleContainer = new ChatBubbleContainer();
+		chatBubbleContainer = new ChatBubbleContainer(windowManager);
 	}
 
 	@Override

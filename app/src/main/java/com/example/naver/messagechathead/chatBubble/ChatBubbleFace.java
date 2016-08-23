@@ -29,15 +29,23 @@ public class ChatBubbleFace extends ChatBubbleOpen{
 	@Override
 	protected void showBubbleRoomView() {
 
-		chatRoomView.setChangeVisible();
 		if (chatRoomListView.getChatRoomListVisibility()) {
 			chatRoomListView.setChangeVisible();
+		} else {
+			chatRoomView.setChangeVisible();
 		}
 
 		if (!chatRoomView.getChatRoomVisibility() && !chatRoomListView.getChatRoomListVisibility()) {
+
 			chatBubbleContainer.changeToCloseBubbleList();
-			for (int i = 0; i < chatBubbleContainer.getBubbleList().size(); i++) {
-				chatBubbleContainer.getBubbleList().get(i).moveTo(ChatBubbleHelper.getOptimizeWidth(), 0);
+			chatBubbleContainer.getParamsXBeforeBubbleOpen();
+			chatBubbleContainer.getParamsYBeforeBubbleOpen();
+
+			//  이전 버블의 위치로 이동
+			for (ChatBubble bubble : chatBubbleContainer.getBubbleList()) {
+				int a = ChatBubbleHelper.getOptimizeWidth() - bubble.layoutParams.x - (ChatBubbleHelper.getOptimizeWidth() - chatBubbleContainer.getParamsXBeforeBubbleOpen());
+				bubble.moveTo2(a, chatBubbleContainer.getParamsYBeforeBubbleOpen());
+				windowManager.updateViewLayout(bubble, bubble.layoutParams);
 			}
 		}
 	}

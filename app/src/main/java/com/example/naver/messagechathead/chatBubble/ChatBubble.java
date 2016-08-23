@@ -3,7 +3,6 @@ package com.example.naver.messagechathead.chatBubble;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.graphics.PixelFormat;
 import android.support.v4.view.ViewCompat;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -44,24 +43,36 @@ public abstract class ChatBubble extends RelativeLayout {
 	}
 
 	public void setImageResource(int resourceId) {
-		faceIcon.setImageResource(resourceId);
 	}
 
 	public void init() {
 		bubbleSize = ChatBubbleHelper.getBubbleSize();
 		faceIcon = (ImageView) inflate(getContext(), R.layout.face_icon_layout, null);
+
+
+
+
+
+
+
 		addView(faceIcon);
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(getContext(), windowManager);
 		chatBubbleHelper.attachLayout(this, Gravity.START | Gravity.TOP, View.VISIBLE, bubbleSize, bubbleSize, WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
 		gestureDetector = new GestureDetector(getContext(), new SimpleGestureListener());
 		scroller = new OverScroller(getContext());
-		bubbleList = chatBubbleContainer.getBubbleCloseList();
 		layoutParams = (WindowManager.LayoutParams)this.getLayoutParams();
+		bubbleList = chatBubbleContainer.getBubbleCloseList();
 	}
 
 	public void moveTo(int finalX, int finalY) {
 		scroller.forceFinished(true);
 		scroller.startScroll(layoutParams.x, layoutParams.y, finalX - layoutParams.x, finalY - layoutParams.y);
+		ViewCompat.postInvalidateOnAnimation(this);
+	}
+
+	public void moveTo2(int finalX, int finalY) {
+		scroller.forceFinished(true);
+		scroller.startScroll(layoutParams.x, layoutParams.y, finalX, finalY);
 		ViewCompat.postInvalidateOnAnimation(this);
 	}
 
@@ -110,7 +121,7 @@ public abstract class ChatBubble extends RelativeLayout {
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 			scroller.forceFinished(true);
-			fling((int)velocityX / 2, (int)velocityY / 2);
+			fling((int)velocityX / 2 , (int)velocityY / 2);
 			return true;
 		}
 

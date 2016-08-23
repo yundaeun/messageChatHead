@@ -22,8 +22,7 @@ public class ChatBubbleClose extends ChatBubble {
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator,
 		ChatRoomListCreator chatRoomListCreator) {
 		super(context, windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator);
-
-		chatBubbleContainer = new ChatBubbleContainer();
+		chatBubbleContainer = new ChatBubbleContainer(windowManager);
 	}
 
 	@Override
@@ -91,6 +90,10 @@ public class ChatBubbleClose extends ChatBubble {
 
 	@Override
 	public void changeBubbleState() {
+		int paramx = layoutParams.x;
+		int paramy = layoutParams.y;
+		chatBubbleContainer.saveParamsBeforeBubbleOpen(paramx, paramy);
+
 		chatBubbleContainer.changeToOpenBubbleList();
 		changeChatRoomViewVisibility();
 		for (int i = 0; i < chatBubbleContainer.getBubbleList().size(); i++) {
