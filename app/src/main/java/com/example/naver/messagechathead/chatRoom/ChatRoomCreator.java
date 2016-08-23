@@ -1,7 +1,6 @@
 package com.example.naver.messagechathead.chatRoom;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,7 @@ public class ChatRoomCreator {
 		chatView = layoutInflater.inflate(R.layout.chat_room_layout, null);
 
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(context, windowManager);
-		chatBubbleHelper.attachLayoutOnBubbleOpen(chatView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
+		chatBubbleHelper.attachLayout(chatView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
 			WindowManager.LayoutParams.TYPE_PHONE);
 
 	}

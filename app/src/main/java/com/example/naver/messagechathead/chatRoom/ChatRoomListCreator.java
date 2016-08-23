@@ -32,7 +32,7 @@ public class ChatRoomListCreator {
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		chatRoomListView = layoutInflater.inflate(R.layout.chat_room_list_layout, null);
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(context, windowManager);
-		chatBubbleHelper.attachLayoutOnBubbleOpen(chatRoomListView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
+		chatBubbleHelper.attachLayout(chatRoomListView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
 			WindowManager.LayoutParams.TYPE_PHONE);
 
 		ListView chatRoomListView = (ListView)this.chatRoomListView.findViewById(R.id.chat_room_listview);
