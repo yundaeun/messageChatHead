@@ -7,9 +7,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.WindowManager;
-import com.bumptech.glide.Glide;
-import com.example.naver.messagechathead.R;
 import com.example.naver.messagechathead.chatBubble.ChatBubble;
+import com.example.naver.messagechathead.chatBubble.ChatConnectView;
 import com.example.naver.messagechathead.chatBubble.ChatBubbleClose;
 import com.example.naver.messagechathead.chatBubble.ChatBubbleContainer;
 import com.example.naver.messagechathead.chatBubble.ChatBubbleDeleteBtn;
@@ -31,31 +30,34 @@ public class ChatBubbleUIService extends Service {
 		super.onCreate();
 
 		windowManager = (WindowManager)getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-		chatBubbleContainer = new ChatBubbleContainer(windowManager);
 
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn = new ChatBubbleDeleteBtn(getApplicationContext(), windowManager);
 		chatBubbleDeleteBtn.init();
 
 		ChatRoomCreator chatRoomCreator = new ChatRoomCreator(getApplicationContext(), windowManager);
 		ChatRoomListCreator chatRoomListCreator = new ChatRoomListCreator(getApplicationContext(), windowManager);
+		ChatConnectView connectView = new ChatConnectView(getApplicationContext(), windowManager);
+		connectView.init();
+		connectView.setPosition(0);
 
+		chatBubbleContainer = new ChatBubbleContainer(windowManager, connectView);
 
 		// open chat bubble
-		ChatBubbleMore openChatBubbleMore = new ChatBubbleMore(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator);
+		ChatBubbleMore openChatBubbleMore = new ChatBubbleMore(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
 		openChatBubbleMore.init();
 		chatBubbleContainer.addChatBubbleOpen(openChatBubbleMore);
 
-		ChatBubbleFace openChatBubbleFace = new ChatBubbleFace(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator);
+		ChatBubbleFace openChatBubbleFace = new ChatBubbleFace(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
 		openChatBubbleFace.init();
 		chatBubbleContainer.addChatBubbleOpen(openChatBubbleFace);
 
 		// close chat bubble
-		ChatBubbleClose closeChatBubbleMore = new ChatBubbleClose(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator);
+		ChatBubbleClose closeChatBubbleMore = new ChatBubbleClose(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
 		closeChatBubbleMore.init();
 		chatBubbleContainer.addChatBubbleClose(closeChatBubbleMore);
 
 
-		ChatBubbleClose closeChatBubbleFace = new ChatBubbleClose(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator);
+		ChatBubbleClose closeChatBubbleFace = new ChatBubbleClose(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
 		closeChatBubbleFace.init();
 		chatBubbleContainer.addChatBubbleClose(closeChatBubbleFace);
 

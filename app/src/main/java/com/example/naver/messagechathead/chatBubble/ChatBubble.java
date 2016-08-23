@@ -36,7 +36,7 @@ public abstract class ChatBubble extends RelativeLayout {
 	ArrayList<ChatBubble> bubbleList;
 	ChatBubbleContainer chatBubbleContainer;
 
-	public ChatBubble(Context context, WindowManager windowManager, ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator, ChatRoomListCreator chatRoomListCreator) {
+	public ChatBubble(Context context, WindowManager windowManager, ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator, ChatRoomListCreator chatRoomListCreator, ChatConnectView connectView) {
 		super(context);
 		this.windowManager = windowManager;
 		this.chatBubbleDeleteBtn = chatBubbleDeleteBtn;

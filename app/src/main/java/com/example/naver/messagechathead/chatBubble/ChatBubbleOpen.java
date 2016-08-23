@@ -15,12 +15,14 @@ import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 public abstract class ChatBubbleOpen extends ChatBubble {
 
 	ChatBubbleContainer chatBubbleContainer;
+	ChatConnectView connectView;
 
 	public ChatBubbleOpen(Context context, WindowManager windowManager,
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator,
-		ChatRoomListCreator chatRoomListCreator) {
-		super(context, windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator);
-		chatBubbleContainer = new ChatBubbleContainer(windowManager);
+		ChatRoomListCreator chatRoomListCreator, ChatConnectView connectView) {
+		super(context, windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
+		chatBubbleContainer = new ChatBubbleContainer(windowManager, connectView);
+		this.connectView = connectView;
 	}
 
 	@Override
@@ -31,6 +33,7 @@ public abstract class ChatBubbleOpen extends ChatBubble {
 	@Override
 	public void changeBubbleState() {
 		showBubbleRoomView();
+		showConnectView();
 	}
 
 	@Override
@@ -57,6 +60,7 @@ public abstract class ChatBubbleOpen extends ChatBubble {
 	}
 
 	protected abstract void showBubbleRoomView();
+	public abstract void showConnectView();
 	protected abstract void moveToFirstBubbleFace();
 	protected abstract void flingBubbleFace(View view, WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList, int velocityX, int velocityY);
 	public abstract void scrollBubbleFace(ChatBubble view, ArrayList<ChatBubble> bubbleList, float distanceX, float distanceY);

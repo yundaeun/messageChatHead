@@ -27,7 +27,7 @@ public class ChatRoomListCreator {
 
 		int bubbleSize = ChatBubbleHelper.getBubbleSize();
 		int dialogWidth = ChatBubbleHelper.displayWidth;
-		int dialogHeight = ChatBubbleHelper.displayHeight - bubbleSize - 110;
+		int dialogHeight = ChatBubbleHelper.displayHeight - bubbleSize - 120;
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		chatRoomListView = layoutInflater.inflate(R.layout.chat_room_list_layout, null);

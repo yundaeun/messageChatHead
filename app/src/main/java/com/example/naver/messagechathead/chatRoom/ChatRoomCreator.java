@@ -22,7 +22,7 @@ public class ChatRoomCreator {
 
 		int bubbleSize = ChatBubbleHelper.getBubbleSize();
 		int dialogWidth = ChatBubbleHelper.displayWidth;
-		int dialogHeight = ChatBubbleHelper.displayHeight - bubbleSize - 110;
+		int dialogHeight = ChatBubbleHelper.displayHeight - bubbleSize - 120;
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		chatView = layoutInflater.inflate(R.layout.chat_room_layout, null);
@@ -30,7 +30,6 @@ public class ChatRoomCreator {
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(context, windowManager);
 		chatBubbleHelper.attachLayout(chatView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
 			WindowManager.LayoutParams.TYPE_PHONE);
-
 	}
 
 	public void setChangeVisible() {

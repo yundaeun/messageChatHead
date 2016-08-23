@@ -2,7 +2,6 @@ package com.example.naver.messagechathead.chatBubble;
 
 import java.util.ArrayList;
 
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -12,6 +11,7 @@ import android.view.WindowManager;
 public class ChatBubbleContainer {
 
 	static WindowManager windowManager;
+	static ChatConnectView connectView;
 	/*
 	* TODO static 제거
 	* */
@@ -21,8 +21,9 @@ public class ChatBubbleContainer {
 	public static int prev_param_x;
 	public static int prev_param_y;
 
-	public ChatBubbleContainer(WindowManager windowManager) {
+	public ChatBubbleContainer(WindowManager windowManager, ChatConnectView connectView) {
 		this.windowManager = windowManager;
+		this.connectView = connectView;
 	}
 
 	public static void addChatBubble(ChatBubble chatBubble) {
@@ -73,6 +74,7 @@ public class ChatBubbleContainer {
 			bubbleList.get(i).layoutParams.y = bubbleCloseList.get(i).layoutParams.y;
 			bubbleOpenList.get(i).setVisibility(View.VISIBLE);
 			bubbleCloseList.get(i).setVisibility(View.GONE);
+			connectView.setVisibility(View.VISIBLE);
 			windowManager.updateViewLayout(bubbleList.get(i), bubbleList.get(i).layoutParams);
 		}
 	}
@@ -93,6 +95,7 @@ public class ChatBubbleContainer {
 			bubbleList.get(i).layoutParams.y = bubbleOpenList.get(i).layoutParams.y;
 			bubbleCloseList.get(i).setVisibility(View.VISIBLE);
 			bubbleOpenList.get(i).setVisibility(View.GONE);
+			connectView.setVisibility(View.GONE);
 			windowManager.updateViewLayout(bubbleList.get(i), bubbleList.get(i).layoutParams);
 		}
 	}

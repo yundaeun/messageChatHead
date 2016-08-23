@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.support.v4.view.ViewCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
@@ -15,10 +14,14 @@ import com.example.naver.messagechathead.utils.ChatBubbleHelper;
  * Created by DAEUN on 16. 8. 11..
  */
 public class ChatBubbleFace extends ChatBubbleOpen{
+
+	ChatConnectView connectView;
+
 	public ChatBubbleFace(Context context, WindowManager windowManager,
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator,
-		ChatRoomListCreator chatRoomListCreator) {
-		super(context, windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator);
+		ChatRoomListCreator chatRoomListCreator, ChatConnectView connectView) {
+		super(context, windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
+		this.connectView = connectView;
 	}
 
 	@Override
@@ -62,6 +65,11 @@ public class ChatBubbleFace extends ChatBubbleOpen{
 		view.layoutParams.x -= (int)distanceX;
 		view.layoutParams.y -= (int)distanceY;
 		windowManager.updateViewLayout(view, view.layoutParams);
+	}
+
+	@Override
+	public void showConnectView() {
+		connectView.setPosition(0);
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.support.v4.view.ViewCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
@@ -17,12 +16,14 @@ import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 public class ChatBubbleClose extends ChatBubble {
 
 	ChatBubbleContainer chatBubbleContainer;
+	ChatConnectView connectView;
 
 	public ChatBubbleClose(Context context, WindowManager windowManager,
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator,
-		ChatRoomListCreator chatRoomListCreator) {
-		super(context, windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator);
-		chatBubbleContainer = new ChatBubbleContainer(windowManager);
+		ChatRoomListCreator chatRoomListCreator, ChatConnectView connectView) {
+		super(context, windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
+		chatBubbleContainer = new ChatBubbleContainer(windowManager, connectView);
+		this.connectView = connectView;
 	}
 
 	@Override
