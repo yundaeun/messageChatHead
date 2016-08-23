@@ -3,6 +3,7 @@ package com.example.naver.messagechathead.chatBubble;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
@@ -29,14 +30,6 @@ public class ChatBubbleMore extends ChatBubbleOpen{
 	@Override
 	protected void showBubbleRoomView() {
 		chatRoomListView.setChangeVisible();
-
-		if (!chatRoomView.getChatRoomVisibility() && !chatRoomListView.getChatRoomListVisibility()) {
-			chatBubbleContainer.changeToCloseBubbleList();
-
-			for (int i = 0; i < chatBubbleContainer.getBubbleList().size(); i++) {
-				chatBubbleContainer.getBubbleList().get(i).moveTo(ChatBubbleHelper.getOptimizeWidth(), 0);
-			}
-		}
 	}
 
 	@Override

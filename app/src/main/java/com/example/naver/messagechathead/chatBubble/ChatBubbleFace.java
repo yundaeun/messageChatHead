@@ -31,7 +31,6 @@ public class ChatBubbleFace extends ChatBubbleOpen{
 
 	@Override
 	protected void showBubbleRoomView() {
-
 		if (chatRoomListView.getChatRoomListVisibility()) {
 			chatRoomListView.setChangeVisible();
 		} else {
@@ -39,17 +38,15 @@ public class ChatBubbleFace extends ChatBubbleOpen{
 		}
 
 		if (!chatRoomView.getChatRoomVisibility() && !chatRoomListView.getChatRoomListVisibility()) {
-
 			chatBubbleContainer.changeToCloseBubbleList();
-			chatBubbleContainer.getParamsXBeforeBubbleOpen();
-			chatBubbleContainer.getParamsYBeforeBubbleOpen();
+			scrollToPrevPosition();
+		}
+	}
 
-			//  이전 버블의 위치로 이동
-			for (ChatBubble bubble : chatBubbleContainer.getBubbleList()) {
-				int a = ChatBubbleHelper.getOptimizeWidth() - bubble.layoutParams.x - (ChatBubbleHelper.getOptimizeWidth() - chatBubbleContainer.getParamsXBeforeBubbleOpen());
-				bubble.moveTo2(a, chatBubbleContainer.getParamsYBeforeBubbleOpen());
-				windowManager.updateViewLayout(bubble, bubble.layoutParams);
-			}
+	private void scrollToPrevPosition() {
+		for (ChatBubble bubble : chatBubbleContainer.getBubbleList()) {
+			bubble.moveTo(chatBubbleContainer.getParamsXBeforeBubbleOpen(), chatBubbleContainer.getParamsYBeforeBubbleOpen());
+			windowManager.updateViewLayout(bubble, bubble.layoutParams);
 		}
 	}
 

@@ -97,13 +97,17 @@ public class ChatBubbleClose extends ChatBubble {
 
 		chatBubbleContainer.changeToOpenBubbleList();
 		changeChatRoomViewVisibility();
-		for (int i = 0; i < chatBubbleContainer.getBubbleList().size(); i++) {
-			chatBubbleContainer.getBubbleList().get(i).moveTo(getXWhenOpen(chatBubbleContainer.getBubbleList().size()-i-1), 0);
-		}
+		arrangeChatBubbles();
 	}
 
 	private void changeChatRoomViewVisibility() {
 		chatRoomView.setChangeVisible();
+	}
+
+	private void arrangeChatBubbles() {
+		for (int i = 0; i < chatBubbleContainer.getBubbleList().size(); i++) {
+			chatBubbleContainer.getBubbleList().get(i).moveTo(getXWhenOpen(chatBubbleContainer.getBubbleList().size()-i-1), 0);
+		}
 	}
 
 	public int getXWhenOpen(int index) {

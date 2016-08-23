@@ -57,13 +57,9 @@ public abstract class ChatBubble extends RelativeLayout {
 		bubbleSize = ChatBubbleHelper.getBubbleSize();
 		faceIcon = (ImageView) inflate(getContext(), R.layout.face_icon_layout, null);
 		addView(faceIcon);
+
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(getContext(), windowManager);
-
-
 		chatBubbleHelper.attachLayout(this, Gravity.START | Gravity.TOP, View.VISIBLE, bubbleSize, bubbleSize, WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
-
-
-
 
 		gestureDetector = new GestureDetector(getContext(), new SimpleGestureListener());
 		scroller = new OverScroller(getContext());
@@ -77,12 +73,6 @@ public abstract class ChatBubble extends RelativeLayout {
 	public void moveTo(int finalX, int finalY) {
 		scroller.forceFinished(true);
 		scroller.startScroll(layoutParams.x, layoutParams.y, finalX - layoutParams.x, finalY - layoutParams.y);
-		ViewCompat.postInvalidateOnAnimation(this);
-	}
-
-	public void moveTo2(int finalX, int finalY) {
-		scroller.forceFinished(true);
-		scroller.startScroll(layoutParams.x, layoutParams.y, finalX, finalY);
 		ViewCompat.postInvalidateOnAnimation(this);
 	}
 

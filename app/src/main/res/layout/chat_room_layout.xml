@@ -56,7 +56,8 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_margin="5dp"
-                        android:background="@android:color/black"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/send"
                         android:id="@+id/imageView2"/>
         </LinearLayout>
 </LinearLayout>
