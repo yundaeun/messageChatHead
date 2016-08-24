@@ -1,6 +1,7 @@
 package com.example.naver.messagechathead.chatBubble;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,13 +52,13 @@ public class ChatBubbleDeleteBtn {
 	}
 
 	public void changeDeleteButtonForNear() {
-	//	chatBubbleAnimator.setAnimation(R.anim.zoom_in, deleteIcon, deleteView, false);
-		deleteIcon.setImageResource(R.drawable.bug);
+//		setAnimation(R.anim.zoom_in, deleteIcon, deleteView, false);
+		deleteIcon.setImageResource(R.drawable.selected_del_icon);
 	}
 
 	public void changeDeleteButtonForFar() {
-		//chatBubbleAnimator.setAnimation(R.anim.zoom_out, deleteIcon, deleteView, false);
-		deleteIcon.setImageResource(R.drawable.image);
+		//setAnimation(R.anim.zoom_out, deleteIcon, deleteView, false);
+		deleteIcon.setImageResource(R.drawable.del_icon);
 	}
 
 	public void deleteAreaShow() {
