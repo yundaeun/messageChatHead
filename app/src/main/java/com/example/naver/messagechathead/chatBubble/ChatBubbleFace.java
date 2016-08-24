@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.WindowManager;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
 import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
-import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
  * Created by DAEUN on 16. 8. 11..
@@ -17,16 +16,16 @@ public class ChatBubbleFace extends ChatBubbleOpen{
 
 	ChatConnectView connectView;
 
-	public ChatBubbleFace(Context context, WindowManager windowManager,
+	public ChatBubbleFace(Context context, ChatBubbleContainer container,
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator,
 		ChatRoomListCreator chatRoomListCreator, ChatConnectView connectView) {
-		super(context, windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
+		super(context, container, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
 		this.connectView = connectView;
 	}
 
 	@Override
 	public void moveBubbleOnActionUp(WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList) {
-		moveTo(ChatBubbleHelper.getOptimizeWidth(), 0);
+		moveTo(container.getOptimizeWidth(), 0);
 	}
 
 	@Override
@@ -38,21 +37,21 @@ public class ChatBubbleFace extends ChatBubbleOpen{
 		}
 
 		if (!chatRoomView.getChatRoomVisibility() && !chatRoomListView.getChatRoomListVisibility()) {
-			chatBubbleContainer.changeToCloseBubbleList();
+			container.changeToCloseBubbleList();
 			scrollToPrevPosition();
 		}
 	}
 
 	private void scrollToPrevPosition() {
-		for (ChatBubble bubble : chatBubbleContainer.getBubbleList()) {
-			bubble.moveTo(chatBubbleContainer.getParamsXBeforeBubbleOpen(), chatBubbleContainer.getParamsYBeforeBubbleOpen());
-			windowManager.updateViewLayout(bubble, bubble.layoutParams);
+		for (ChatBubble bubble : container.getBubbleList()) {
+			bubble.moveTo(container.getParamsXBeforeBubbleOpen(), container.getParamsYBeforeBubbleOpen());
+			container.updateViewLayout(bubble, bubble.layoutParams);
 		}
 	}
 
 	@Override
 	protected void moveToFirstBubbleFace() {
-		int finalX = ChatBubbleHelper.getOptimizeWidth() - layoutParams.x;
+		int finalX = container.getOptimizeWidth() - layoutParams.x;
 		int finalY = -layoutParams.y;
 		scroller.startScroll(layoutParams.x, layoutParams.y, finalX, finalY);
 	}
@@ -61,7 +60,7 @@ public class ChatBubbleFace extends ChatBubbleOpen{
 	public void scrollBubbleFace(ChatBubble view, ArrayList<ChatBubble> bubbleList, float distanceX, float distanceY) {
 		view.layoutParams.x -= (int)distanceX;
 		view.layoutParams.y -= (int)distanceY;
-		windowManager.updateViewLayout(view, view.layoutParams);
+		container.updateViewLayout(view, view.layoutParams);
 	}
 
 	@Override
@@ -74,8 +73,8 @@ public class ChatBubbleFace extends ChatBubbleOpen{
 		ArrayList<ChatBubble> bubbleList, int velocityX, int velocityY) {
 		scroller.fling(
 			layoutParams.x, layoutParams.y, velocityX, velocityY,
-			30, ChatBubbleHelper.getOptimizeWidth()-30,
-			30, ChatBubbleHelper.getOptimizeHeight()-30, 30, 30);
+			30, container.getOptimizeWidth()-30,
+			30, container.getOptimizeHeight()-30, 30, 30);
 		ViewCompat.postInvalidateOnAnimation(view);
 	}
 }

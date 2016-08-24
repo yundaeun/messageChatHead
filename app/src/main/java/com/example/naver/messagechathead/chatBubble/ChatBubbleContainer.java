@@ -2,64 +2,93 @@ package com.example.naver.messagechathead.chatBubble;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.graphics.PixelFormat;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
+import com.example.naver.messagechathead.chatBubble.ChatBubble;
+import com.example.naver.messagechathead.chatBubble.ChatConnectView;
+import com.example.naver.messagechathead.utils.ChatBubbleConfig;
 
 /**
  * Created by Naver on 16. 8. 15..
  */
 public class ChatBubbleContainer {
 
-	static WindowManager windowManager;
-	static ChatConnectView connectView;
+	private final Context context;
+	WindowManager windowManager;
+	ChatConnectView connectView;
 	/*
-	* TODO static 제거
+	* TODO 제거
 	* */
-	public static ArrayList<ChatBubble> bubbleList;
-	public static ArrayList<ChatBubble> bubbleOpenList;
-	public static ArrayList<ChatBubble> bubbleCloseList;
-	public static int prev_param_x;
-	public static int prev_param_y;
+	public ArrayList<ChatBubble> bubbleList;
+	public ArrayList<ChatBubble> bubbleOpenList;
+	public ArrayList<ChatBubble> bubbleCloseList;
+	public int prev_param_x;
+	public int prev_param_y;
+	private int displayWidth;
+	private int displayHeight;
 
-	public ChatBubbleContainer(WindowManager windowManager, ChatConnectView connectView) {
-		this.windowManager = windowManager;
+	public ChatBubbleContainer(Context context, WindowManager windowManager, ChatConnectView connectView) {
+		this.context = context;
 		this.connectView = connectView;
+		this.windowManager = windowManager;
+
+		getDisplaySize();
 	}
 
-	public static void addChatBubble(ChatBubble chatBubble) {
+	public WindowManager.LayoutParams attachLayout(View view, int location, int visibilty, int width, int height, int type) {
+		WindowManager.LayoutParams params =
+			new WindowManager.LayoutParams(width, height, type,
+				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+				PixelFormat.TRANSPARENT);
+		params.gravity = location;
+		windowManager.addView(view, params);
+		view.setVisibility(visibilty);
+		return params;
+	}
+
+	public void clear() {
+		bubbleList.clear();
+		bubbleCloseList.clear();
+		bubbleOpenList.clear();
+	}
+
+	public void addChatBubble(ChatBubble chatBubble) {
 		if (bubbleList == null) {
 			bubbleList = new ArrayList<>();
 		}
 		bubbleList.add(chatBubble);
 	}
 
-	public static ArrayList<ChatBubble> getBubbleList() {
+	public ArrayList<ChatBubble> getBubbleList() {
 		return bubbleList;
 	}
 
-	public static void addChatBubbleOpen(ChatBubble chatBubble) {
+	public void addChatBubbleOpen(ChatBubble chatBubble) {
 		if (bubbleOpenList == null) {
 			bubbleOpenList = new ArrayList<>();
 		}
 		bubbleOpenList.add(chatBubble);
 	}
 
-	public static ArrayList<ChatBubble> getBubbleOpenList() {
+	public ArrayList<ChatBubble> getBubbleOpenList() {
 		return bubbleOpenList;
 	}
 
-	public static void addChatBubbleClose (ChatBubble chatBubble) {
+	public void addChatBubbleClose (ChatBubble chatBubble) {
 		if (bubbleCloseList == null) {
 			bubbleCloseList = new ArrayList<>();
 		}
 		bubbleCloseList.add(chatBubble);
 	}
 
-	public static ArrayList<ChatBubble> getBubbleCloseList() {
+	public ArrayList<ChatBubble> getBubbleCloseList() {
 		return bubbleCloseList;
 	}
 
-	public static ArrayList<ChatBubble> changeToOpenBubbleList() {
+	public ArrayList<ChatBubble> changeToOpenBubbleList() {
 		bubbleOpenList = getBubbleOpenList();
 		bubbleCloseList = getBubbleCloseList();
 		bubbleList = bubbleOpenList;
@@ -67,19 +96,19 @@ public class ChatBubbleContainer {
 		return bubbleList;
 	}
 
-	private static void changeToOpenParams(ArrayList<ChatBubble> bubbleList, ArrayList<ChatBubble> bubbleCloseList) {
+	private void changeToOpenParams(ArrayList<ChatBubble> bubbleList, ArrayList<ChatBubble> bubbleCloseList) {
 
 		for (int i=0; i<bubbleList.size(); i++ ) {
 			bubbleList.get(i).layoutParams.x = bubbleCloseList.get(i).layoutParams.x;
 			bubbleList.get(i).layoutParams.y = bubbleCloseList.get(i).layoutParams.y;
 			bubbleOpenList.get(i).setVisibility(View.VISIBLE);
 			bubbleCloseList.get(i).setVisibility(View.GONE);
-			connectView.setVisibility(View.VISIBLE);
+			//connectView.setVisibility(View.VISIBLE);
 			windowManager.updateViewLayout(bubbleList.get(i), bubbleList.get(i).layoutParams);
 		}
 	}
 
-	public static ArrayList<ChatBubble> changeToCloseBubbleList() {
+	public ArrayList<ChatBubble> changeToCloseBubbleList() {
 		bubbleOpenList = getBubbleOpenList();
 		bubbleCloseList = getBubbleCloseList();
 		bubbleList = getBubbleList();
@@ -89,13 +118,13 @@ public class ChatBubbleContainer {
 		return bubbleList;
 	}
 
-	private static void changeToCloseParams(ArrayList<ChatBubble> bubbleList, ArrayList<ChatBubble> bubbleOpenList) {
+	private void changeToCloseParams(ArrayList<ChatBubble> bubbleList, ArrayList<ChatBubble> bubbleOpenList) {
 		for (int i=0; i<bubbleList.size(); i++ ) {
 			bubbleList.get(i).layoutParams.x = bubbleOpenList.get(i).layoutParams.x;
 			bubbleList.get(i).layoutParams.y = bubbleOpenList.get(i).layoutParams.y;
 			bubbleCloseList.get(i).setVisibility(View.VISIBLE);
 			bubbleOpenList.get(i).setVisibility(View.GONE);
-			connectView.setVisibility(View.GONE);
+			//connectView.setVisibility(View.GONE);
 			windowManager.updateViewLayout(bubbleList.get(i), bubbleList.get(i).layoutParams);
 		}
 	}
@@ -111,5 +140,39 @@ public class ChatBubbleContainer {
 
 	public int getParamsYBeforeBubbleOpen() {
 		return prev_param_y;
+	}
+
+	private void getDisplaySize() {
+		DisplayMetrics disp = context.getResources().getDisplayMetrics();
+		displayWidth = disp.widthPixels;
+		displayHeight = disp.heightPixels;
+	}
+
+	public int getBubbleSize() {
+		return displayWidth / ChatBubbleConfig.BUBBLE_NUM;
+	}
+
+	public int getOptimizeWidth() {
+		return displayWidth - getBubbleSize();
+	}
+
+	public int getOptimizeHeight() {
+		return displayHeight - getBubbleSize();
+	}
+
+	public int getDisplayCenter() {
+		return displayWidth / 2;
+	}
+
+	public int getWidth() {
+		return displayWidth;
+	}
+
+	public int getHeight() {
+		return displayHeight;
+	}
+
+	public void updateViewLayout(View bubble, WindowManager.LayoutParams layoutParams) {
+		windowManager.updateViewLayout(bubble, layoutParams);
 	}
 }

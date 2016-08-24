@@ -8,21 +8,18 @@ import android.view.View;
 import android.view.WindowManager;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
 import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
-import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
  * Created by Naver on 16. 8. 17..
  */
 public class ChatBubbleClose extends ChatBubble {
 
-	ChatBubbleContainer chatBubbleContainer;
 	ChatConnectView connectView;
 
-	public ChatBubbleClose(Context context, WindowManager windowManager,
+	public ChatBubbleClose(Context context, ChatBubbleContainer container,
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator,
 		ChatRoomListCreator chatRoomListCreator, ChatConnectView connectView) {
-		super(context, windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
-		chatBubbleContainer = new ChatBubbleContainer(windowManager, connectView);
+		super(context, container, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator);
 		this.connectView = connectView;
 	}
 
@@ -36,7 +33,7 @@ public class ChatBubbleClose extends ChatBubble {
 	}
 
 	private boolean isLeftSide(ArrayList<ChatBubble> bubbleList) {
-		return bubbleList.get(0).layoutParams.x + ChatBubbleHelper.getBubbleSize() / 2 < ChatBubbleHelper.getDisplayCenter();
+		return bubbleList.get(0).layoutParams.x + container.getBubbleSize() / 2 < container.getDisplayCenter();
 	}
 
 	private void moveToLeft() {
@@ -44,7 +41,7 @@ public class ChatBubbleClose extends ChatBubble {
 	}
 
 	private void moveToRight() {
-		moveTo(ChatBubbleHelper.getOptimizeWidth() + 30, bubbleList.get(0).layoutParams.y);
+		moveTo(container.getOptimizeWidth() + 30, bubbleList.get(0).layoutParams.y);
 	}
 
 	@Override
@@ -52,14 +49,14 @@ public class ChatBubbleClose extends ChatBubble {
 	}
 
 	@Override
-	public void scrollBubbleOnComputeScroll(View view, WindowManager windowManager,
+	public void scrollBubbleOnComputeScroll(View view,
 		WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList) {
 		if (bubbleList == null) {
 		} else {
 			for (ChatBubble bubble : bubbleList) {
 				bubble.layoutParams.x = scroller.getCurrX();
 				bubble.layoutParams.y = scroller.getCurrY();
-				windowManager.updateViewLayout(bubble, bubble.layoutParams);
+				container.updateViewLayout(bubble, bubble.layoutParams);
 			}
 		}
 	}
@@ -69,8 +66,8 @@ public class ChatBubbleClose extends ChatBubble {
 		for (ChatBubble bubbles : bubbleList) {
 			scroller.fling(
 				bubbles.layoutParams.x, bubbles.layoutParams.y, velocityX, velocityY,
-				- 30, ChatBubbleHelper.getOptimizeWidth() + 30,
-				- 30, ChatBubbleHelper.getOptimizeHeight() + 30, 60, 60);
+				- 30, container.getOptimizeWidth() + 30,
+				- 30, container.getOptimizeHeight() + 30, 60, 60);
 			ViewCompat.postInvalidateOnAnimation(bubbles);
 		}
 	}
@@ -85,7 +82,7 @@ public class ChatBubbleClose extends ChatBubble {
 				bubbleList.get(i).layoutParams.x = bubbleList.get(i+1).layoutParams.x + (int)distanceX;
 				bubbleList.get(i).layoutParams.y = bubbleList.get(i+1).layoutParams.y + (int)distanceY;
 			}
-			windowManager.updateViewLayout(bubbleList.get(i), bubbleList.get(i).layoutParams);
+			container.updateViewLayout(bubbleList.get(i), bubbleList.get(i).layoutParams);
 		}
 	}
 
@@ -93,9 +90,9 @@ public class ChatBubbleClose extends ChatBubble {
 	public void changeBubbleState() {
 		int paramx = layoutParams.x;
 		int paramy = layoutParams.y;
-		chatBubbleContainer.saveParamsBeforeBubbleOpen(paramx, paramy);
+		container.saveParamsBeforeBubbleOpen(paramx, paramy);
 
-		chatBubbleContainer.changeToOpenBubbleList();
+		container.changeToOpenBubbleList();
 		changeChatRoomViewVisibility();
 		arrangeChatBubbles();
 	}
@@ -105,13 +102,13 @@ public class ChatBubbleClose extends ChatBubble {
 	}
 
 	private void arrangeChatBubbles() {
-		for (int i = 0; i < chatBubbleContainer.getBubbleList().size(); i++) {
-			chatBubbleContainer.getBubbleList().get(i).moveTo(getXWhenOpen(chatBubbleContainer.getBubbleList().size()-i-1), 0);
+		for (int i = 0; i < container.getBubbleList().size(); i++) {
+			container.getBubbleList().get(i).moveTo(getXWhenOpen(container.getBubbleList().size()-i-1), 0);
 		}
 	}
 
 	public int getXWhenOpen(int index) {
-		return ChatBubbleHelper.getOptimizeWidth() - ChatBubbleHelper.getBubbleSize() * index;
+		return container.getOptimizeWidth() - container.getBubbleSize() * index;
 	}
 
 }

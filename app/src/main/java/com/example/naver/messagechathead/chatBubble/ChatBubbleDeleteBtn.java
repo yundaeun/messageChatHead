@@ -1,7 +1,6 @@
 package com.example.naver.messagechathead.chatBubble;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import com.example.naver.messagechathead.R;
-import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
  * Created by Naver on 16. 8. 12..
@@ -21,21 +19,21 @@ public class ChatBubbleDeleteBtn {
 	private View deleteView;
 	private ImageView deleteIcon;
 	private int bubbleSize;
+	ChatBubbleContainer container;
 
-	public ChatBubbleDeleteBtn(Context context, WindowManager windowManager) {
+	public ChatBubbleDeleteBtn(Context context, ChatBubbleContainer container) {
 		this.context = context;
 		this.windowManager = windowManager;
+		this.container = container;
 	}
 
 	public void init() {
-		ChatBubbleHelper helper = new ChatBubbleHelper(context, windowManager);
-		bubbleSize = helper.getBubbleSize();
+		bubbleSize = container.getBubbleSize();
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		deleteView = layoutInflater.inflate(R.layout.delete_icon_layout, null);
 		deleteIcon = (ImageView)deleteView.findViewById(R.id.deleteImage);
-		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(context, windowManager);
-		chatBubbleHelper.attachLayout(deleteView, Gravity.BOTTOM | Gravity.CENTER, View.GONE, bubbleSize, bubbleSize,
+		container.attachLayout(deleteView, Gravity.BOTTOM | Gravity.CENTER, View.GONE, bubbleSize, bubbleSize,
 			WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
 	}
 
@@ -45,7 +43,7 @@ public class ChatBubbleDeleteBtn {
 		int minWidth = location[0] - deleteIcon.getWidth();
 		int maxWidth = location[0] + deleteIcon.getWidth();
 
-		int minHeight = location[1] - (ChatBubbleHelper.getBubbleSize() + deleteIcon.getHeight());
+		int minHeight = location[1] - (container.getBubbleSize() + deleteIcon.getHeight());
 		int maxHeight = location[1] + deleteIcon.getHeight();
 
 		return faceIconParams.x < maxWidth && faceIconParams.x > minWidth && faceIconParams.y < maxHeight && faceIconParams.y > minHeight;

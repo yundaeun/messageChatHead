@@ -10,33 +10,43 @@ import android.view.WindowManager;
 import android.widget.ListView;
 import com.example.naver.messagechathead.R;
 import com.example.naver.messagechathead.adapter.ChatRoomListAdapter;
+import com.example.naver.messagechathead.chatBubble.ChatBubbleContainer;
 import com.example.naver.messagechathead.data.ChatRoomListData;
-import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
  * Created by Naver on 16. 8. 12..
  */
 public class ChatRoomListCreator {
 	private Context context;
-	private WindowManager windowManager;
+	private ChatBubbleContainer container;
 	private View chatRoomListView;
 
-	public ChatRoomListCreator(Context context, WindowManager windowManager) {
+	public ChatRoomListCreator(Context context, ChatBubbleContainer container) {
 		this.context = context;
-		this.windowManager = windowManager;
+		this.container = container;
+		init();
+	}
 
-		int bubbleSize = ChatBubbleHelper.getBubbleSize();
-		int dialogWidth = ChatBubbleHelper.displayWidth;
-		int dialogHeight = ChatBubbleHelper.displayHeight - bubbleSize - 120;
+	private void init() {
+		attachView();
+
+		ListView chatRoomListView = (ListView)this.chatRoomListView.findViewById(R.id.chat_room_listview);
+		ChatRoomListAdapter
+			chatRoomListAdapter = new ChatRoomListAdapter(context, R.layout.chat_room_list_item, getChatRoomListDataList());
+		chatRoomListView.setAdapter(chatRoomListAdapter);
+	}
+
+	private void attachView() {
+		int dialogWidth = container.getWidth();
+		int dialogHeight = container.getOptimizeHeight() - 120;
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		chatRoomListView = layoutInflater.inflate(R.layout.chat_room_list_layout, null);
-		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(context, windowManager);
-		chatBubbleHelper.attachLayout(chatRoomListView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
+		container.attachLayout(chatRoomListView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
 			WindowManager.LayoutParams.TYPE_PHONE);
+	}
 
-		ListView chatRoomListView = (ListView)this.chatRoomListView.findViewById(R.id.chat_room_listview);
-
+	private ArrayList<ChatRoomListData> getChatRoomListDataList() {
 		ArrayList<ChatRoomListData> chatRoomList = new ArrayList<>();
 		chatRoomList.add(new ChatRoomListData("윤다은", "알겠습니다."));
 		chatRoomList.add(new ChatRoomListData("김미미", "감사합니다."));
@@ -44,10 +54,7 @@ public class ChatRoomListCreator {
 		chatRoomList.add(new ChatRoomListData("윤다은", "알겠습니다."));
 		chatRoomList.add(new ChatRoomListData("김미미", "감사합니다."));
 		chatRoomList.add(new ChatRoomListData("슈슈니", "오케이!"));
-
-		ChatRoomListAdapter
-			chatRoomListAdapter = new ChatRoomListAdapter(context, R.layout.chat_room_list_item, chatRoomList);
-		chatRoomListView.setAdapter(chatRoomListAdapter);
+		return chatRoomList;
 	}
 
 	public void setChangeVisible() {

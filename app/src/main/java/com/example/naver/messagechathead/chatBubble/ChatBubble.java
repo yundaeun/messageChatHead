@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.util.Log;
@@ -22,14 +21,12 @@ import com.example.naver.messagechathead.R;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
 import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
 import com.example.naver.messagechathead.service.ChatBubbleUIService;
-import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 import com.example.naver.messagechathead.utils.RoundImageTransform;
 
 /**
  * Created by Naver on 16. 8. 18..
  */
 public abstract class ChatBubble extends RelativeLayout {
-	protected WindowManager windowManager;
 	protected WindowManager.LayoutParams layoutParams;
 	private GestureDetector gestureDetector;
 	protected OverScroller scroller;
@@ -39,11 +36,11 @@ public abstract class ChatBubble extends RelativeLayout {
 	ChatRoomCreator chatRoomView;
 	ImageView faceIcon;
 	ArrayList<ChatBubble> bubbleList;
-	ChatBubbleContainer chatBubbleContainer;
+	ChatBubbleContainer container;
 
-	public ChatBubble(Context context, WindowManager windowManager, ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator, ChatRoomListCreator chatRoomListCreator, ChatConnectView connectView) {
+	public ChatBubble(Context context, ChatBubbleContainer container, ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator, ChatRoomListCreator chatRoomListCreator) {
 		super(context);
-		this.windowManager = windowManager;
+		this.container = container;
 		this.chatBubbleDeleteBtn = chatBubbleDeleteBtn;
 		this.chatRoomView = chatRoomCreator;
 		this.chatRoomListView = chatRoomListCreator;
@@ -59,18 +56,17 @@ public abstract class ChatBubble extends RelativeLayout {
 	}
 
 	public void init() {
-		bubbleSize = ChatBubbleHelper.getBubbleSize();
+		bubbleSize = container.getBubbleSize();
 		faceIcon = (ImageView) inflate(getContext(), R.layout.face_icon_layout, null);
 		addView(faceIcon);
 
-		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(getContext(), windowManager);
-		chatBubbleHelper.attachLayout(this, Gravity.START | Gravity.TOP, View.VISIBLE, bubbleSize, bubbleSize, WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
+		container.attachLayout(this, Gravity.START | Gravity.TOP, View.VISIBLE, bubbleSize, bubbleSize, WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
 
 		gestureDetector = new GestureDetector(getContext(), new SimpleGestureListener());
 		scroller = new OverScroller(getContext());
 
 		layoutParams = (WindowManager.LayoutParams)this.getLayoutParams();
-		bubbleList = chatBubbleContainer.getBubbleCloseList();
+		bubbleList = container.getBubbleCloseList();
 		setImageURL();
 
 	}
@@ -103,8 +99,6 @@ public abstract class ChatBubble extends RelativeLayout {
 
 			Intent intent = new Intent(getContext().getApplicationContext(), ChatBubbleUIService.class);
 			getContext().getApplicationContext().stopService(intent);
-
-
 			Log.d("Yde", "yde stop service");
 		}
 		chatBubbleDeleteBtn.deleteAreaHide();
@@ -117,7 +111,7 @@ public abstract class ChatBubble extends RelativeLayout {
 				requestLayout();
 				scrollToStartOnScrollIsFinished(layoutParams);
 			} else {
-				scrollBubbleOnComputeScroll(this, windowManager, layoutParams, bubbleList);
+				scrollBubbleOnComputeScroll(this, layoutParams, bubbleList);
 			}
 			ViewCompat.postInvalidateOnAnimation(this);
 		}
@@ -168,7 +162,8 @@ public abstract class ChatBubble extends RelativeLayout {
 
 	public abstract void moveBubbleOnActionUp(WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList);
 	public abstract void scrollToStartOnScrollIsFinished(WindowManager.LayoutParams layoutParams);
-	public abstract void scrollBubbleOnComputeScroll(View view, WindowManager windowManager, WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList);
+	public abstract void scrollBubbleOnComputeScroll(View view,
+		WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList);
 	public abstract void flingBubble(View view, WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList, int velocityX, int velocityY);
 	public abstract void scrollBubble(ChatBubble view, ArrayList<ChatBubble> bubbleList, float distanceX, float distanceY);
 	public abstract void changeBubbleState();

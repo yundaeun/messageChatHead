@@ -3,12 +3,10 @@ package com.example.naver.messagechathead.chatBubble;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
 import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
-import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
  * Created by Naver on 16. 8. 18..
@@ -16,10 +14,10 @@ import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 public class ChatBubbleMore extends ChatBubbleOpen{
 	ChatConnectView connectView;
 
-	public ChatBubbleMore(Context context, WindowManager windowManager,
+	public ChatBubbleMore(Context context, ChatBubbleContainer container,
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator,
 		ChatRoomListCreator chatRoomListCreator, ChatConnectView connectView) {
-		super(context, windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
+		super(context, container, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
 		this.connectView = connectView;
 	}
 

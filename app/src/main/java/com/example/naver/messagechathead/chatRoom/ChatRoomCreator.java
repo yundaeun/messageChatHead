@@ -6,30 +6,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import com.example.naver.messagechathead.R;
-import com.example.naver.messagechathead.utils.ChatBubbleHelper;
+import com.example.naver.messagechathead.chatBubble.ChatBubbleContainer;
 
 /**
  * Created by Naver on 16. 8. 12..
  */
 public class ChatRoomCreator {
 	private Context context;
-	private WindowManager windowManager;
+	private ChatBubbleContainer container;
 	private View chatView;
 
-	public ChatRoomCreator(Context context, WindowManager windowManager) {
+	public ChatRoomCreator(Context context, ChatBubbleContainer container) {
 		this.context = context;
-		this.windowManager = windowManager;
+		this.container = container;
 
-		int bubbleSize = ChatBubbleHelper.getBubbleSize();
-		int dialogWidth = ChatBubbleHelper.displayWidth;
-		int dialogHeight = ChatBubbleHelper.displayHeight - bubbleSize - 120;
+		init();
+	}
+
+	private void init() {
+		int dialogWidth = container.getWidth();
+		int dialogHeight = container.getOptimizeHeight() - 120;
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		chatView = layoutInflater.inflate(R.layout.chat_room_layout, null);
-
-		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(context, windowManager);
-		chatBubbleHelper.attachLayout(chatView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
-			WindowManager.LayoutParams.TYPE_PHONE);
+		container.attachLayout(chatView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight, WindowManager.LayoutParams.TYPE_PHONE);
 	}
 
 	public void setChangeVisible() {

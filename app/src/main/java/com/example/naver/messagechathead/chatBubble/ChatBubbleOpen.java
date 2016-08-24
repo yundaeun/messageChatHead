@@ -7,27 +7,24 @@ import android.view.View;
 import android.view.WindowManager;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
 import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
-import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 
 /**
  * Created by DAEUN on 16. 8. 11..
  */
 public abstract class ChatBubbleOpen extends ChatBubble {
 
-	ChatBubbleContainer chatBubbleContainer;
 	ChatConnectView connectView;
 
-	public ChatBubbleOpen(Context context, WindowManager windowManager,
+	public ChatBubbleOpen(Context context, ChatBubbleContainer container,
 		ChatBubbleDeleteBtn chatBubbleDeleteBtn, ChatRoomCreator chatRoomCreator,
 		ChatRoomListCreator chatRoomListCreator, ChatConnectView connectView) {
-		super(context, windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
-		chatBubbleContainer = new ChatBubbleContainer(windowManager, connectView);
+		super(context, container, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator);
 		this.connectView = connectView;
 	}
 
 	@Override
 	public void moveBubbleOnActionUp(WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList) {
-		moveTo(ChatBubbleHelper.getOptimizeWidth(), 0);
+		moveTo(container.getOptimizeWidth(), 0);
 	}
 
 	@Override
@@ -42,11 +39,11 @@ public abstract class ChatBubbleOpen extends ChatBubble {
 	}
 
 	@Override
-	public void scrollBubbleOnComputeScroll(View view, WindowManager windowManager,
+	public void scrollBubbleOnComputeScroll(View view,
 		WindowManager.LayoutParams layoutParams, ArrayList<ChatBubble> bubbleList) {
 		layoutParams.x = scroller.getCurrX();
 		layoutParams.y = scroller.getCurrY();
-		windowManager.updateViewLayout(view, layoutParams);
+		container.updateViewLayout(view, layoutParams);
 	}
 
 	@Override
