@@ -32,6 +32,7 @@ public class ChatConnectView extends ImageView {
 		ChatBubbleHelper chatBubbleHelper = new ChatBubbleHelper(getContext(), windowManager);
 		chatBubbleHelper.attachLayout(this, Gravity.START | Gravity.TOP, View.GONE, connectionSize, connectionSize, WindowManager.LayoutParams.TYPE_PHONE);
 		layoutParams = (WindowManager.LayoutParams)this.getLayoutParams();
+		setPosition(0);
 	}
 
 	public void setPosition(int bubblePosition) {

@@ -2,7 +2,11 @@ package com.example.naver.messagechathead.chatBubble;
 
 import java.util.ArrayList;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -17,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.example.naver.messagechathead.R;
 import com.example.naver.messagechathead.chatRoom.ChatRoomCreator;
 import com.example.naver.messagechathead.chatRoom.ChatRoomListCreator;
+import com.example.naver.messagechathead.service.ChatBubbleUIService;
 import com.example.naver.messagechathead.utils.ChatBubbleHelper;
 import com.example.naver.messagechathead.utils.RoundImageTransform;
 
@@ -92,11 +97,15 @@ public abstract class ChatBubble extends RelativeLayout {
 		return false;
 	}
 
+	@TargetApi(Build.VERSION_CODES.KITKAT)
 	private void serviceStopWithDeleteBtn() {
 		if (chatBubbleDeleteBtn.isOverlayDeleteArea(layoutParams)) {
-			//ChatBubbleUIService chatBubbleUIService = new ChatBubbleUIService();
-			//chatBubbleUIService.stopService();
-			Log.d("yde", "yde service stop");
+
+			Intent intent = new Intent(getContext().getApplicationContext(), ChatBubbleUIService.class);
+			getContext().getApplicationContext().stopService(intent);
+
+
+			Log.d("Yde", "yde stop service");
 		}
 		chatBubbleDeleteBtn.deleteAreaHide();
 	}

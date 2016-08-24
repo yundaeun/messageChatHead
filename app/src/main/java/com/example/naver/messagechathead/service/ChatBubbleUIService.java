@@ -1,10 +1,13 @@
 package com.example.naver.messagechathead.service;
 
+import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import com.example.naver.messagechathead.chatBubble.ChatBubble;
@@ -25,6 +28,12 @@ public class ChatBubbleUIService extends Service {
 	private WindowManager windowManager;
 	ChatBubbleContainer chatBubbleContainer;
 
+	ChatConnectView connectView;
+	ChatBubbleMore openChatBubbleMore;
+	ChatBubbleFace openChatBubbleFace;
+	ChatBubbleClose closeChatBubbleMore;
+	ChatBubbleClose closeChatBubbleFace;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -36,28 +45,27 @@ public class ChatBubbleUIService extends Service {
 
 		ChatRoomCreator chatRoomCreator = new ChatRoomCreator(getApplicationContext(), windowManager);
 		ChatRoomListCreator chatRoomListCreator = new ChatRoomListCreator(getApplicationContext(), windowManager);
-		ChatConnectView connectView = new ChatConnectView(getApplicationContext(), windowManager);
+		connectView = new ChatConnectView(getApplicationContext(), windowManager);
 		connectView.init();
-		connectView.setPosition(0);
 
 		chatBubbleContainer = new ChatBubbleContainer(windowManager, connectView);
 
 		// open chat bubble
-		ChatBubbleMore openChatBubbleMore = new ChatBubbleMore(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
+		openChatBubbleMore = new ChatBubbleMore(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
 		openChatBubbleMore.init();
 		chatBubbleContainer.addChatBubbleOpen(openChatBubbleMore);
 
-		ChatBubbleFace openChatBubbleFace = new ChatBubbleFace(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
+		openChatBubbleFace = new ChatBubbleFace(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
 		openChatBubbleFace.init();
 		chatBubbleContainer.addChatBubbleOpen(openChatBubbleFace);
 
 		// close chat bubble
-		ChatBubbleClose closeChatBubbleMore = new ChatBubbleClose(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
+		closeChatBubbleMore = new ChatBubbleClose(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
 		closeChatBubbleMore.init();
 		chatBubbleContainer.addChatBubbleClose(closeChatBubbleMore);
 
 
-		ChatBubbleClose closeChatBubbleFace = new ChatBubbleClose(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
+		closeChatBubbleFace = new ChatBubbleClose(getApplicationContext(), windowManager, chatBubbleDeleteBtn, chatRoomCreator, chatRoomListCreator, connectView);
 		closeChatBubbleFace.init();
 		chatBubbleContainer.addChatBubbleClose(closeChatBubbleFace);
 
@@ -76,9 +84,11 @@ public class ChatBubbleUIService extends Service {
 		return null;
 	}
 
-	public void stopService() {
-		Intent intent = new Intent(getApplicationContext(), ChatBubbleUIService.class);
-		getApplicationContext().stopService(intent);
+	@TargetApi(Build.VERSION_CODES.KITKAT)
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+
 	}
 
 }
