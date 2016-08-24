@@ -3,7 +3,7 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/round_layout"
+        android:background="@drawable/shape_chat_bubble_room_round"
         android:weightSum="1">
 
         <TextView

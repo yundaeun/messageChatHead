@@ -8,5 +8,5 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:id="@+id/deleteImage"
-            android:src="@drawable/del_icon" />
+            android:src="@drawable/chat_bubble_del_icon" />
 </RelativeLayout>

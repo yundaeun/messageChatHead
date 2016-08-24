@@ -57,7 +57,7 @@ public abstract class ChatBubble extends RelativeLayout {
 
 	public void init() {
 		bubbleSize = container.getBubbleSize();
-		faceIcon = (ImageView) inflate(getContext(), R.layout.face_icon_layout, null);
+		faceIcon = (ImageView) inflate(getContext(), R.layout.chat_bubble_layout, null);
 		addView(faceIcon);
 
 		container.attachLayout(this, Gravity.START | Gravity.TOP, View.VISIBLE, bubbleSize, bubbleSize, WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);

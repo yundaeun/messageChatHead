@@ -3,6 +3,7 @@ package com.example.naver.messagechathead.adapter;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,59 +16,44 @@ import com.example.naver.messagechathead.data.ChatRoomListData;
 /**
  * Created by Naver on 16. 8. 12..
  */
-public class ChatRoomListAdapter extends BaseAdapter {
-	private LayoutInflater inflater;
+public class ChatRoomListAdapter extends RecyclerView.Adapter<ChatRoomListAdapter.ViewHolder> {
 	private ArrayList<ChatRoomListData> chatRoomList;
-	private int layout;
 
-	public ChatRoomListAdapter(Context context, int layout, ArrayList<ChatRoomListData> chatRoomList) {
-		this.layout = layout;
+	public static class ViewHolder extends RecyclerView.ViewHolder {
+		public TextView chatRoomName;
+		public TextView chatRoomLastMessage;
+
+		public ViewHolder(View view) {
+			super(view);
+			chatRoomName = (TextView)view.findViewById(R.id.chat_room_name);
+			chatRoomLastMessage = (TextView)view.findViewById(R.id.chat_room_last_message);
+		}
+	}
+
+	public ChatRoomListAdapter(ArrayList<ChatRoomListData> chatRoomList) {
 		this.chatRoomList = chatRoomList;
-		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	@Override
-	public int getCount() {
+	public ChatRoomListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+		int viewType) {
+		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_bubble_room_list_item, parent, false);
+		ViewHolder vh = new ViewHolder(v);
+		return vh;
+	}
+
+	@Override
+	public void onBindViewHolder(ViewHolder holder, int position) {
+		holder.chatRoomName.setText(chatRoomList.get(position).getChatRoomName());
+		holder.chatRoomLastMessage.setText(chatRoomList.get(position).getChatRoomLastMessage());
+	}
+
+	@Override
+	public int getItemCount() {
 		return chatRoomList.size();
 	}
-
-	@Override
-	public Object getItem(int position) {
-		return chatRoomList.get(position);
-	}
-
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
-
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		ChatRoomListHolder viewHolder;
-
-		if (convertView == null) {
-			convertView = inflater.inflate(layout, parent, false);
-
-			viewHolder = new ChatRoomListHolder();
-			viewHolder.chatRoomName = (TextView)convertView.findViewById(R.id.chat_room_name);
-			viewHolder.chatRoomLastMessage = (TextView)convertView.findViewById(R.id.chat_room_last_message);
-			convertView.setTag(viewHolder);
-		} else {
-			viewHolder = (ChatRoomListHolder)convertView.getTag();
-		}
-
-		viewHolder.chatRoomName.setText(chatRoomList.get(position).getChatRoomName());
-		viewHolder.chatRoomLastMessage.setText(chatRoomList.get(position).getChatRoomLastMessage());
-
-		return convertView;
-	}
-
-	class ChatRoomListHolder {
-		//ImageView icon;
-		TextView chatRoomName;
-		TextView chatRoomLastMessage;
-	}
 }
+
 
 
 

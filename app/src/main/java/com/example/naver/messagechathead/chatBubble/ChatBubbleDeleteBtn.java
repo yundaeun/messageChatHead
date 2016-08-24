@@ -31,7 +31,7 @@ public class ChatBubbleDeleteBtn {
 		bubbleSize = container.getBubbleSize();
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		deleteView = layoutInflater.inflate(R.layout.delete_icon_layout, null);
+		deleteView = layoutInflater.inflate(R.layout.chat_bubble_delete_layout, null);
 		deleteIcon = (ImageView)deleteView.findViewById(R.id.deleteImage);
 		container.attachLayout(deleteView, Gravity.BOTTOM | Gravity.CENTER, View.GONE, bubbleSize, bubbleSize,
 			WindowManager.LayoutParams.TYPE_PRIORITY_PHONE);
@@ -51,12 +51,12 @@ public class ChatBubbleDeleteBtn {
 
 	public void changeDeleteButtonForNear() {
 //		setAnimation(R.anim.zoom_in, deleteIcon, deleteView, false);
-		deleteIcon.setImageResource(R.drawable.selected_del_icon);
+		deleteIcon.setImageResource(R.drawable.chat_bubble_selected_del_icon);
 	}
 
 	public void changeDeleteButtonForFar() {
 		//setAnimation(R.anim.zoom_out, deleteIcon, deleteView, false);
-		deleteIcon.setImageResource(R.drawable.del_icon);
+		deleteIcon.setImageResource(R.drawable.chat_bubble_del_icon);
 	}
 
 	public void deleteAreaShow() {

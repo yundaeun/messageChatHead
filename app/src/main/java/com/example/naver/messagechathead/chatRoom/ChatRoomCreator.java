@@ -28,7 +28,7 @@ public class ChatRoomCreator {
 		int dialogHeight = container.getOptimizeHeight() - 120;
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		chatView = layoutInflater.inflate(R.layout.chat_room_layout, null);
+		chatView = layoutInflater.inflate(R.layout.chat_bubble_room_layout, null);
 		container.attachLayout(chatView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight, WindowManager.LayoutParams.TYPE_PHONE);
 	}
 

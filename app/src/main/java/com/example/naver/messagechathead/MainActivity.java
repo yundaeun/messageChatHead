@@ -33,19 +33,4 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		switch (requestCode) {
-			case 1000 :
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-					if (Settings.canDrawOverlays(this)) {
-						// Do something with overlay permission
-					} else {
-						// Show dialog which persuades that we need permission
-					}
-				}
-				break;
-		}
-	}
 }

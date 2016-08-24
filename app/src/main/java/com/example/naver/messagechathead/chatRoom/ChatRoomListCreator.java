@@ -3,6 +3,7 @@ package com.example.naver.messagechathead.chatRoom;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,7 @@ import com.example.naver.messagechathead.R;
 import com.example.naver.messagechathead.adapter.ChatRoomListAdapter;
 import com.example.naver.messagechathead.chatBubble.ChatBubbleContainer;
 import com.example.naver.messagechathead.data.ChatRoomListData;
-
+import android.support.v7.widget.RecyclerView;
 /**
  * Created by Naver on 16. 8. 12..
  */
@@ -20,6 +21,9 @@ public class ChatRoomListCreator {
 	private Context context;
 	private ChatBubbleContainer container;
 	private View chatRoomListView;
+	private RecyclerView recyclerView;
+	private RecyclerView.Adapter chatRoomListAdapter;
+	private RecyclerView.LayoutManager layoutManager;
 
 	public ChatRoomListCreator(Context context, ChatBubbleContainer container) {
 		this.context = context;
@@ -30,10 +34,12 @@ public class ChatRoomListCreator {
 	private void init() {
 		attachView();
 
-		ListView chatRoomListView = (ListView)this.chatRoomListView.findViewById(R.id.chat_room_listview);
-		ChatRoomListAdapter
-			chatRoomListAdapter = new ChatRoomListAdapter(context, R.layout.chat_room_list_item, getChatRoomListDataList());
-		chatRoomListView.setAdapter(chatRoomListAdapter);
+		recyclerView = (RecyclerView)this.chatRoomListView.findViewById(R.id.chat_room_listview);
+		layoutManager = new LinearLayoutManager(context);
+		recyclerView.setLayoutManager(layoutManager);
+		chatRoomListAdapter = new ChatRoomListAdapter(getChatRoomListDataList());
+
+		recyclerView.setAdapter(chatRoomListAdapter);
 	}
 
 	private void attachView() {
@@ -41,7 +47,7 @@ public class ChatRoomListCreator {
 		int dialogHeight = container.getOptimizeHeight() - 120;
 
 		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		chatRoomListView = layoutInflater.inflate(R.layout.chat_room_list_layout, null);
+		chatRoomListView = layoutInflater.inflate(R.layout.chat_bubble_room_list_layout, null);
 		container.attachLayout(chatRoomListView, Gravity.BOTTOM, View.GONE, dialogWidth, dialogHeight,
 			WindowManager.LayoutParams.TYPE_PHONE);
 	}

@@ -24,7 +24,7 @@ public class ChatConnectView extends ImageView {
 
 	public void init() {
 		imageView = (ImageView)this;
-		imageView.setImageResource(R.drawable.semo);
+		imageView.setImageResource(R.drawable.chat_bubble_room_semo);
 
 		container.attachLayout(this, Gravity.START | Gravity.TOP, View.GONE, connectionSize, connectionSize, WindowManager.LayoutParams.TYPE_PHONE);
 		layoutParams = (WindowManager.LayoutParams)this.getLayoutParams();
