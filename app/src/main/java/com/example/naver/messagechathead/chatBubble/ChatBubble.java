@@ -71,6 +71,16 @@ public abstract class ChatBubble extends RelativeLayout {
 
 	}
 
+	public void show() {
+		setAlpha(0f);
+		animate().alpha(1).setDuration(1);
+	}
+
+	public void hide() {
+		setAlpha(1f);
+		animate().alpha(0).setDuration(1);
+	}
+
 	public void moveTo(int finalX, int finalY) {
 		scroller.forceFinished(true);
 		scroller.startScroll(layoutParams.x, layoutParams.y, finalX - layoutParams.x, finalY - layoutParams.y);

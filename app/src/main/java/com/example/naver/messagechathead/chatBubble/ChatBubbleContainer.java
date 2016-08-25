@@ -101,8 +101,10 @@ public class ChatBubbleContainer {
 		for (int i=0; i<bubbleList.size(); i++ ) {
 			bubbleList.get(i).layoutParams.x = bubbleCloseList.get(i).layoutParams.x;
 			bubbleList.get(i).layoutParams.y = bubbleCloseList.get(i).layoutParams.y;
-			bubbleOpenList.get(i).setVisibility(View.VISIBLE);
 			bubbleCloseList.get(i).setVisibility(View.GONE);
+			bubbleCloseList.get(i).hide();
+			bubbleOpenList.get(i).setVisibility(View.VISIBLE);
+			bubbleOpenList.get(i).show();
 			//connectView.setVisibility(View.VISIBLE);
 			windowManager.updateViewLayout(bubbleList.get(i), bubbleList.get(i).layoutParams);
 		}
@@ -122,8 +124,11 @@ public class ChatBubbleContainer {
 		for (int i=0; i<bubbleList.size(); i++ ) {
 			bubbleList.get(i).layoutParams.x = bubbleOpenList.get(i).layoutParams.x;
 			bubbleList.get(i).layoutParams.y = bubbleOpenList.get(i).layoutParams.y;
-			bubbleCloseList.get(i).setVisibility(View.VISIBLE);
+
 			bubbleOpenList.get(i).setVisibility(View.GONE);
+			bubbleOpenList.get(i).hide();
+			bubbleCloseList.get(i).setVisibility(View.VISIBLE);
+			bubbleCloseList.get(i).show();
 			//connectView.setVisibility(View.GONE);
 			windowManager.updateViewLayout(bubbleList.get(i), bubbleList.get(i).layoutParams);
 		}

@@ -11,7 +11,6 @@
         <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/bug"
                 android:id="@+id/imageView"
                 android:layout_marginLeft="20dp"
                 android:layout_centerVertical="true"
@@ -29,7 +28,6 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="윤다은"
                     android:textColor="@android:color/black"
                     android:id="@+id/chat_room_name"/>
 
@@ -37,7 +35,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="네 알겠습니다."
                     android:textColor="@android:color/black"
                     android:id="@+id/chat_room_last_message"/>
         </LinearLayout>
